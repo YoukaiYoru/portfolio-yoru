@@ -1,5 +1,12 @@
 ---
 import '../styles/global.css';
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Edward Portfolio" } = Astro.props;
+
 ---
 
 <!doctype html>
@@ -10,7 +17,7 @@ import '../styles/global.css';
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Edward Portfolio</title>
+		<title>{title}</title>
 	</head> 
 	<body class="flex min-h-screen bg-black">
 		<slot />

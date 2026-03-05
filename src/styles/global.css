@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+    @font-face {
+    font-family: 'Optima';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Optima'), url('/fonts/OPTIMA.woff') format('woff');
+    }
+    
+
+    @font-face {
+    font-family: 'Optima Italic';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Optima Italic'), url('/fonts/Optima_Italic.woff') format('woff');
+    }
+    
+
+    @font-face {
+    font-family: 'Optima Medium';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Optima Medium'), url('/fonts/Optima%20Medium.woff') format('woff');
+    }
+    
+
+    @font-face {
+    font-family: 'Optima Bold';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Optima Bold'), url('/fonts/OPTIMA_B.woff') format('woff');
+    }
+
+    @theme {
+      --font-display: 'Optima', sans-serif;
+      --color-ffbg: #0046D6;
+      --color-ffhover: #1DAAE7;
+      --color-ffborder:#1896EB;
+      --color-ffline: #0EADC3;
+      --color-fflineleft:#004A8B  
+    }
