@@ -1,5 +1,9 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
+import FFMenu from '@components/FFMenu.astro';
+import Time from '@components/Time.vue';
+import BackButtonKey from '@components/BackButtonKey.vue';
 
 interface Props {
   title?: string;
@@ -18,9 +22,24 @@ const { title = "Edward Portfolio" } = Astro.props;
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+    <ClientRouter />
 	</head> 
 	<body class="flex min-h-screen bg-black">
-		<slot />
+    <div class="relative bg-[url('/src/assets/bg-menu2.png')] bg-center bg-no-repeat bg-contain min-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] m-4 flex flex-col text-center">
+    <aside class="absolute top-11 left-11 flex flex-row items-start ">
+      <h1 class="text-[40px] [writing-mode:vertical-rl] rotate-360 ">
+        {title}
+      </h1>
+      <FFMenu />
+    </aside>
+  <main class="flex flex-1 items-center justify-center">
+    <slot />
+    </main>
+  <footer class="mt-auto flex w-full items-end justify-between">
+    <Time client:load />
+    <BackButtonKey client:load />
+    </footer>
+  </div>
 	</body>
 </html>
 

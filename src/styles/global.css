@@ -31,8 +31,18 @@
     src: local('Optima Bold'), url('/fonts/OPTIMA_B.woff') format('woff');
     }
 
+    @font-face {
+        font-family: 'Route159-SemiBold';
+        src:url('/fonts/Route159-SemiBold.ttf.woff') format('woff'),
+            url('/fonts/Route159-SemiBold.ttf.svg#Route159-SemiBold') format('svg'),
+            url('/fonts/Route159-SemiBold.ttf.eot'),
+            url('/fonts/Route159-SemiBold.ttf.eot?#iefix') format('embedded-opentype'); 
+        font-weight: normal;
+        font-style: normal;
+    }
     @theme {
       --font-display: 'Optima', sans-serif;
+      --font-route: 'Route159-SemiBold', sans-serif;
       --color-ffbg: #0046D6;
       --color-ffhover: #1DAAE7;
       --color-ffborder:#1896EB;

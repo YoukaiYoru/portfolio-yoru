@@ -1,0 +1,68 @@
+---
+const routes = [
+  { name: "About Me",    href: "/about" },
+  { name: "Projects",    href: "/projects", subtext: "12 / 20" },
+  { name: "Experience",  href: "/experience" },
+  { name: "Contact",     href: "/contact" },
+  { name: "Settings",    href: "/settings" },
+];
+
+const normalizePath = (path: string) => {
+  if (path.length > 1 && path.endsWith("/")) {
+    return path.slice(0, -1);
+  }
+
+  return path;
+};
+
+const currentPath = normalizePath(Astro.url.pathname);
+const isRouteActive = (href: string) => currentPath === normalizePath(href);
+
+const baseLinkClasses = "relative z-10 flex items-center w-full max-w-105 mx-auto px-10 py-2 transition-all duration-300 group outline-none mask-alpha mask-r-from-black mask-r-from-50% mask-r-to-transparent md:w-100 md:max-w-none md:mx-0 border-l-[5px] border-t border-b";
+const activeLinkClasses = "border-l-white border-t-ffhover/40 border-b-ffhover/40 bg-linear-to-r from-ffhover/80 via-ffhover/40 to-blue-950/10 shadow-[inset_6px_0_20px_rgba(59,130,246,0.4)]";
+const inactiveLinkClasses = "border-l-fflineleft border-ffborder/30 bg-linear-to-r from-black to-transparent hover:from-ffhover/80 hover:via-ffhover/50 hover:to-blue-950/10 hover:border-l-ffhover/80 hover:border-t-ffhover/20 hover:border-b-ffhover/20 hover:shadow-[inset_6px_0_20px_rgba(59,130,246,0.4)] hover:mask-alpha hover:mask-r-from-black hover:mask-r-from-50% hover:mask-r-to-transparent";
+
+const baseIndicatorClasses = "absolute -left-1 top-0 h-full w-0.75 transition-all duration-300";
+const activeIndicatorClasses = "bg-white shadow-[0_0_12px_rgba(255,255,255,0.6),0_0_30px_rgba(59,130,246,0.5)]";
+const inactiveIndicatorClasses = "bg-black shadow-none group-hover:bg-white group-hover:shadow-[0_0_12px_rgba(255,255,255,0.6),0_0_30px_rgba(59,130,246,0.5)]";
+const itemWrapperClasses = "relative isolate mb-0.5 last:mb-0";
+const linkDarkLayerClasses = "absolute inset-0 z-0 translate-x-1 translate-y-9 blur-[1px] pointer-events-none skew-y-10 bg-linear-to-r from-black/40 to-transparent";
+
+const baseTextClasses = "relative z-10 text-2xl transition-all duration-300";
+const activeTextClasses = "text-white -translate-x-2 -translate-y-0.5 drop-shadow-[0_0_16px_rgba(255,255,255,1),0_0_32px_rgba(59,130,246,0.4)] text-shadow-lg/20";
+const inactiveTextClasses = "text-slate-300 group-hover:text-white group-hover:-translate-x-2 group-hover:-translate-y-0.5 group-hover:drop-shadow-[0_0_16px_rgba(255,255,255,1),0_0_32px_rgba(59,130,246,0.4)] group-hover:text-shadow-lg/20";
+---
+
+<nav class="flex flex-col">
+  {routes.map(route => {
+    const isActive = isRouteActive(route.href);
+
+    return (
+    <div class={itemWrapperClasses}>
+      <a 
+        href={route.href}
+        aria-current={isActive ? "page" : undefined}
+        class:list={[
+          baseLinkClasses,
+          isActive ? activeLinkClasses : inactiveLinkClasses
+        ]}
+      >
+        <div class:list={[
+          `${baseIndicatorClasses} z-10`,
+          isActive ? activeIndicatorClasses : inactiveIndicatorClasses
+        ]}></div>
+
+        <span class:list={[
+          baseTextClasses,
+          isActive ? activeTextClasses : inactiveTextClasses
+        ]}>
+          {route.name}
+        </span>
+      </a>
+
+      <div class={linkDarkLayerClasses}></div>
+    </div>
+    );
+  })}
+</nav>
+
