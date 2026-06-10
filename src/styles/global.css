@@ -47,5 +47,13 @@
       --color-ffhover: #1DAAE7;
       --color-ffborder:#1896EB;
       --color-ffline: #0EADC3;
-      --color-fflineleft:#004A8B  
+      --color-fflineleft:#004A8B;
+      --color-game-bg:     #05101e;
+      --color-game-border: #1e4a72;
+      --color-game-accent: #4ea8de;
+      --color-game-active: #0d2d4a;
+      --color-game-text:   #c8dff0;
+      --color-game-dim:    #5a8aaa;
+      --color-game-panel:  #040e1a;
     }
+
