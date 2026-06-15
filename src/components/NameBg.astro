@@ -1,0 +1,46 @@
+---
+// src/components/NameBg.astro
+---
+
+<div class="name-bg" aria-hidden="true"></div>
+
+<style>
+  .name-bg {
+    width: 48px;
+    height: 477px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  /* Capa 1: el "blob" central con blur fuerte (simula el feGaussianBlur stdDeviation=20) */
+  .name-bg::before {
+    content: '';
+    position: absolute;
+    /* Forma elongada vertical, ligeramente descentrada */
+    left: 6px;
+    top: 2px;
+    width: 25px;
+    height: 466px;
+    background-color: #004687;
+    border-radius: 50%;
+    filter: blur(20px);
+    opacity: 0.85;
+  }
+
+  /* Capa 2: gradiente radial encima (simula el ellipse con radialGradient) */
+  .name-bg::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+      ellipse 65% 97% at 7% 50%,
+      rgba(0, 70, 135, 0.86) 35%,
+      rgba(0, 70, 135, 0) 100%
+    );
+  }
+</style>
