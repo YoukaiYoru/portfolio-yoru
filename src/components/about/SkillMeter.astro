@@ -1,0 +1,26 @@
+---
+interface Props { name: string; level: number; category: string; }
+const { name, level, category } = Astro.props;
+---
+
+<div class="skill-meter">
+  <div class="skill-meter__top">
+    <div><span>{category}</span><strong>{name}</strong></div>
+    <output>{level}</output>
+  </div>
+  <div class="skill-meter__track" role="meter" aria-label={name} aria-valuenow={level} aria-valuemin="0" aria-valuemax="100">
+    <span style={`--skill-level:${level}%`}></span>
+  </div>
+</div>
+
+<style>
+  .skill-meter { padding: .8rem 0; border-bottom: 1px solid rgba(75, 205, 255, .16); }
+  .skill-meter:last-child { border-bottom: 0; }
+  .skill-meter__top { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+  .skill-meter__top div { display: grid; gap: .15rem; }
+  span { color: #4ea8de; font: .62rem 'Route159-SemiBold', sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+  strong { color: #e5f4ff; font-size: 1rem; font-weight: 400; }
+  output { color: #9edfff; font-size: 1.4rem; }
+  .skill-meter__track { height: 3px; margin-top: .65rem; background: rgba(63, 137, 181, .2); }
+  .skill-meter__track span { display: block; width: var(--skill-level); height: 100%; background: linear-gradient(90deg, #0b7dd4, #71e4ff); box-shadow: 0 0 10px rgba(70, 214, 255, .65); }
+</style>

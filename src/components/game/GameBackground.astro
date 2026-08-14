@@ -1,0 +1,149 @@
+---
+interface Props {
+  accentRgb?: string;
+  secondaryRgb?: string;
+  intensity?: number;
+}
+
+const {
+  accentRgb = "29, 170, 231",
+  secondaryRgb = "0, 70, 214",
+  intensity = 1,
+} = Astro.props;
+---
+
+<div
+  class="game-backdrop"
+  style={`--backdrop-accent:${accentRgb};--backdrop-secondary:${secondaryRgb};--backdrop-intensity:${intensity}`}
+  aria-hidden="true"
+>
+  <div class="game-backdrop__wash"></div>
+  <div class="game-backdrop__grid"></div>
+  <div class="game-backdrop__strata"></div>
+  <div class="game-backdrop__aura game-backdrop__aura--primary"></div>
+  <div class="game-backdrop__aura game-backdrop__aura--secondary"></div>
+  <div class="game-backdrop__facet game-backdrop__facet--large"></div>
+  <div class="game-backdrop__facet game-backdrop__facet--small"></div>
+  <div class="game-backdrop__horizon"></div>
+</div>
+
+<style>
+  .game-backdrop {
+    --grid-size: clamp(2rem, 3.2vw, 3.75rem);
+    position: fixed;
+    z-index: 0;
+    top: 4rem;
+    right: var(--frame-gutter, 0);
+    bottom: 3rem;
+    left: var(--frame-gutter, 0);
+    overflow: hidden;
+    pointer-events: none;
+    background: #020914;
+  }
+
+  .game-backdrop > div { position: absolute; pointer-events: none; }
+
+  .game-backdrop__wash {
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 12% 7%, rgba(var(--backdrop-accent), calc(.5 * var(--backdrop-intensity))), transparent 34%),
+      radial-gradient(ellipse at 48% -8%, rgba(var(--backdrop-secondary), calc(.24 * var(--backdrop-intensity))), transparent 42%),
+      linear-gradient(132deg, #083066 0%, #041a38 30%, #021127 58%, #010711 82%, #01040a 100%);
+  }
+
+  .game-backdrop__grid {
+    inset: 0;
+    opacity: calc(.38 * var(--backdrop-intensity));
+    background-image:
+      linear-gradient(rgba(var(--backdrop-accent), .065) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--backdrop-accent), .065) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+    -webkit-mask-image: linear-gradient(90deg, transparent 2%, rgba(0, 0, 0, .32) 28%, #000 72%, rgba(0, 0, 0, .5));
+    mask-image: linear-gradient(90deg, transparent 2%, rgba(0, 0, 0, .32) 28%, #000 72%, rgba(0, 0, 0, .5));
+  }
+
+  .game-backdrop__strata {
+    inset: 4rem 0 3rem;
+    opacity: calc(.2 * var(--backdrop-intensity));
+    background: repeating-linear-gradient(165deg, transparent 0 5.2rem, rgba(var(--backdrop-accent), .055) 5.25rem 5.32rem, transparent 5.38rem 9rem);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 34%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 34%, #000 88%, transparent);
+  }
+
+  .game-backdrop__aura {
+    border-radius: 50%;
+    filter: blur(clamp(2rem, 5vw, 5rem));
+    opacity: calc(.22 * var(--backdrop-intensity));
+  }
+
+  .game-backdrop__aura--primary {
+    top: -12%;
+    right: 7%;
+    width: clamp(18rem, 42vw, 46rem);
+    aspect-ratio: 1;
+    background: rgba(var(--backdrop-accent), .55);
+  }
+
+  .game-backdrop__aura--secondary {
+    bottom: -25%;
+    left: 18%;
+    width: clamp(16rem, 34vw, 36rem);
+    aspect-ratio: 1;
+    background: rgba(var(--backdrop-secondary), .38);
+  }
+
+  .game-backdrop__facet {
+    aspect-ratio: 1;
+    transform: rotate(45deg);
+    border: 1px solid rgba(var(--backdrop-accent), calc(.14 * var(--backdrop-intensity)));
+    box-shadow: inset 0 0 clamp(2rem, 7vw, 7rem) rgba(var(--backdrop-secondary), .07);
+  }
+
+  .game-backdrop__facet::before,
+  .game-backdrop__facet::after {
+    content: '';
+    position: absolute;
+    background: linear-gradient(90deg, transparent, rgba(var(--backdrop-accent), .24), transparent);
+  }
+
+  .game-backdrop__facet::before { top: 50%; left: -18%; width: 136%; height: 1px; }
+  .game-backdrop__facet::after { top: -18%; left: 50%; width: 1px; height: 136%; background: linear-gradient(transparent, rgba(var(--backdrop-accent), .2), transparent); }
+
+  .game-backdrop__facet--large {
+    right: -18vw;
+    bottom: -44vw;
+    width: clamp(34rem, 68vw, 72rem);
+  }
+
+  .game-backdrop__facet--small {
+    top: 18%;
+    left: 42%;
+    width: clamp(10rem, 20vw, 22rem);
+    opacity: .42;
+  }
+
+  .game-backdrop__horizon {
+    top: clamp(3.8rem, 8vh, 6rem);
+    right: 0;
+    left: 0;
+    height: 2px;
+    opacity: calc(.4 * var(--backdrop-intensity));
+    background: linear-gradient(90deg, transparent, rgba(var(--backdrop-accent), .26) 25%, rgba(var(--backdrop-accent), .08) 72%, transparent);
+    box-shadow: 0 12px 28px rgba(var(--backdrop-secondary), .2);
+  }
+
+  @media (max-width: 767px) {
+    .game-backdrop { --grid-size: clamp(2.4rem, 12vw, 3.2rem); top: 4.35rem; bottom: 5.15rem; }
+    .game-backdrop__wash { background: radial-gradient(ellipse at 15% 8%, rgba(var(--backdrop-accent), calc(.42 * var(--backdrop-intensity))), transparent 34%), linear-gradient(155deg, #073064, #03152e 44%, #010816 76%, #01040a); }
+    .game-backdrop__grid { opacity: calc(.46 * var(--backdrop-intensity)); -webkit-mask-image: linear-gradient(#000, rgba(0, 0, 0, .35)); mask-image: linear-gradient(#000, rgba(0, 0, 0, .35)); }
+    .game-backdrop__strata { inset-block: 4.35rem 5.15rem; opacity: calc(.22 * var(--backdrop-intensity)); }
+    .game-backdrop__facet--large { right: -52vw; bottom: -18vw; width: 42rem; }
+    .game-backdrop__facet--small { top: 15%; left: 43%; width: 11rem; }
+    .game-backdrop__aura--primary { top: -8%; right: -35%; width: 28rem; }
+    .game-backdrop__aura--secondary { bottom: -12%; left: -35%; width: 24rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .game-backdrop * { animation: none !important; }
+  }
+</style>

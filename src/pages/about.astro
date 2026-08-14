@@ -1,10 +1,82 @@
-
 ---
-import FFMenu from "@components/FFMenu.astro";
 import LayoutPrincipal from "../layouts/LayoutPrincipal.astro";
-import ImageAbout from "@components/ImageAbout.astro";
+import ImageAbout from "@components/about/ImageAbout.astro";
+import SkillMeter from "@components/about/SkillMeter.astro";
+import GamePanel from "@components/game/GamePanel.astro";
+import MateriaOrb from "@components/game/MateriaOrb.astro";
+import GameVector from "@components/game/GameVector.astro";
+import PartyHeader from "@components/game/PartyHeader.astro";
+import portrait from "@assets/images/portrait.png";
+import { profile, stats } from "@data/profile";
+import { skills } from "@data/skills";
 ---
 
 <LayoutPrincipal title="About Me">
-  <ImageAbout srcPath="/src/assets/Fotofinal.png" alt="About Image" />
+  <div class="character-page">
+    <PartyHeader label="Edward" mode="Character profile" materia={["green", "blue", "purple", "yellow"]} />
+
+    <div class="character-layout">
+      <div class="character-data">
+        <GamePanel label="Character information" number="LV. 08">
+          <div class="identity">
+            <div class="identity__icon"><GameVector icon="database" label="Developer class" size="3.4rem" /></div>
+            <div><span>Active class</span><h1>{profile.role}</h1><p>{profile.about}</p></div>
+          </div>
+
+          <dl class="parameters">
+            <div><dt>Location</dt><dd>{profile.location}</dd></div>
+            <div><dt>Speciality</dt><dd>{profile.specialties.join(" · ")}</dd></div>
+            <div><dt>Current quest</dt><dd>{profile.focus}</dd></div>
+            <div><dt>Status</dt><dd class="online">{profile.availability}</dd></div>
+          </dl>
+        </GamePanel>
+
+        <GamePanel label="Attributes" number={`${skills.length} skills`}>
+          <div class="skills-grid">{skills.map(skill => <SkillMeter {...skill} />)}</div>
+        </GamePanel>
+
+        <ul class="stats-grid" aria-label="Estadísticas profesionales">
+          {stats.map(stat => <li><strong>{stat.value}</strong><span>{stat.label}</span></li>)}
+        </ul>
+      </div>
+
+      <aside class="character-visual">
+        <GamePanel label="Active character" number="EO">
+          <ImageAbout srcPath={portrait.src} alt={`Retrato profesional de ${profile.name}`} name={profile.name} role="DEV" birthday={profile.birthday} skillCount={skills.length} />
+        </GamePanel>
+        <div class="materia-notes">
+          <MateriaOrb color="green" label="Python" tooltip="Python · lenguaje de programación y automatización" />
+          <MateriaOrb color="blue" label="AWS" tooltip="AWS · servicios y arquitectura cloud" />
+          <MateriaOrb color="purple" label="SQL" tooltip="SQL · consultas y gestión de bases de datos" />
+        </div>
+      </aside>
+    </div>
+  </div>
 </LayoutPrincipal>
+
+<style>
+  .character-page { display: grid; min-width: 0; gap: 1rem; max-width: 84rem; margin: 0 auto; }
+  .character-layout { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(20rem, .85fr); gap: 1rem; align-items: start; }
+  .character-data { display: grid; min-width: 0; gap: 1rem; }
+  .character-visual { position: sticky; top: 0; align-self: start; min-width: 0; }
+  .identity { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); gap: 1rem; }
+  .identity__icon { display: grid; width: 3.8rem; height: 3.8rem; place-items: center; border: 1px solid #21bce9; background: #020b16; transform: rotate(45deg); }
+  .identity__icon :global(.game-vector) { transform: rotate(-45deg); }
+  .identity span { color: #55c9ef; font: .6rem 'Route159-SemiBold', sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+  .identity h1 { margin-top: .2rem; color: #effaff; font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 400; line-height: 1; }
+  .identity p { margin-top: .75rem; color: #9ab5c7; line-height: 1.62; }
+  .parameters { display: grid; gap: 0; margin-top: 1.3rem; }
+  .parameters div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: 1rem; padding: .7rem .5rem; border-top: 1px solid rgba(57, 171, 216, .18); }
+  dt { color: #45c2eb; font: .62rem 'Route159-SemiBold', sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+  dd { color: #d8e8f1; line-height: 1.45; }
+  .online::before { content: ''; display: inline-block; width: .45rem; height: .45rem; margin-right: .5rem; border-radius: 50%; background: #66ffac; box-shadow: 0 0 10px #43df8d; }
+  .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1.5rem; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid rgba(70, 184, 229, .22); background: rgba(3, 20, 39, .7); }
+  .stats-grid li { display: grid; gap: .15rem; padding: 1rem; border-right: 1px solid rgba(70, 184, 229, .16); }
+  .stats-grid li:last-child { border-right: 0; }
+  .stats-grid strong { color: #e9f8ff; font-size: 1.65rem; font-weight: 400; }
+  .stats-grid span { color: #678ca2; font: .55rem 'Route159-SemiBold', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  .materia-notes { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin-top: .9rem; }
+  @media (max-width: 1120px) { .character-layout { grid-template-columns: minmax(0, 1fr); } .character-visual { position: static; order: -1; } }
+  @media (max-width: 600px) { .skills-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: 1fr 1fr; } .parameters div { grid-template-columns: 1fr; gap: .3rem; } }
+</style>

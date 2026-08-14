@@ -1,9 +1,73 @@
 ---
-import FFMenu from "@components/FFMenu.astro";
 import LayoutPrincipal from "../layouts/LayoutPrincipal.astro";
+import GamePanel from "@components/game/GamePanel.astro";
+import PartyHeader from "@components/game/PartyHeader.astro";
+import ExperienceItem from "@components/content/ExperienceItem.astro";
+import { experience } from "@data/experience";
+import { education } from "@data/education";
+import { certifications } from "@data/certifications";
 
 ---
 
 <LayoutPrincipal title="Experience">
-  
+  <div class="experience-page">
+    <PartyHeader label="Career" mode="Quest log" meta="Active chapters" materia={["red", "purple", "green"]} />
+    <GamePanel label="Quest timeline" number={`${experience.length} chapters`}>
+      <div class="timeline">{experience.map((item, index) => <ExperienceItem item={item} index={index} />)}</div>
+    </GamePanel>
+
+    <div class="progress-grid">
+      <GamePanel label="Education" number="Active">
+        {education.map(item => (
+          <article class="education-card">
+            <span>{item.period}</span>
+            <h2>{item.degree}</h2>
+            <p>{item.institution} · {item.location}</p>
+            <small>{item.detail}</small>
+          </article>
+        ))}
+      </GamePanel>
+
+      <GamePanel label="Certifications" number={`${certifications.length} records`}>
+        <ul class="certification-list">
+          {certifications.map(item => (
+            <li>
+              <div><strong>{item.name}</strong><span>{item.issuer}</span></div>
+              <div><span>{item.date}</span><small class:list={{ pending: item.status === 'Pending' }}>{item.status}</small></div>
+            </li>
+          ))}
+        </ul>
+      </GamePanel>
+    </div>
+
+    <aside class="experience-note">
+      <span>Next objective</span>
+      <p>Seguir desarrollando soluciones backend y cloud que automaticen procesos, protejan la infraestructura y conviertan datos en resultados útiles.</p>
+    </aside>
+  </div>
 </LayoutPrincipal>
+
+<style>
+  .experience-page { display: grid; gap: 1rem; max-width: 72rem; margin: 0 auto; }
+  .timeline { display: grid; gap: 0; }
+  .progress-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 1rem; align-items: stretch; }
+  .progress-grid > :global(.game-panel) { height: 100%; }
+  .education-card { display: grid; gap: .45rem; }
+  .education-card > span, .certification-list span { color: #58ccef; font: .62rem 'Route159-SemiBold', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  .education-card h2 { color: #edf9ff; font-size: 1.45rem; font-weight: 400; }
+  .education-card p { color: #9fc1d4; }
+  .education-card small { color: #70d8ff; }
+  .certification-list { display: grid; }
+  .certification-list li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .65rem 0; border-bottom: 1px solid rgba(67, 180, 224, .18); }
+  .certification-list li:last-child { border-bottom: 0; }
+  .certification-list div { display: grid; gap: .15rem; }
+  .certification-list li > div:last-child { justify-items: end; text-align: right; }
+  .certification-list strong { color: #dcecf4; font-weight: 400; }
+  .certification-list small { color: #70d8ff; font: .58rem 'Route159-SemiBold', sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+  .certification-list small.pending { color: #e6ce55; }
+  .experience-note { display: grid; grid-template-columns: 10rem 1fr; gap: 1rem; padding: 1.2rem; border-left: 2px solid #41bce9; background: linear-gradient(90deg, rgba(20, 98, 155, .2), transparent); }
+  .experience-note span { color: #5bcff3; font: .66rem 'Route159-SemiBold', sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+  .experience-note p { color: #c1d5e1; line-height: 1.5; }
+  @media (max-width: 760px) { .progress-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 560px) { .experience-note { grid-template-columns: 1fr; } .certification-list li { align-items: flex-start; } }
+</style>

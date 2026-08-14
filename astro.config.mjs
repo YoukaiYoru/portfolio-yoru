@@ -2,12 +2,7 @@
 import { defineConfig } from 'astro/config';
 
 import tailwindcss from '@tailwindcss/vite';
-
 import vue from '@astrojs/vue';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,6 +17,10 @@ export default defineConfig({
     },
     ssr: {
       noExternal: ['@tresjs/cientos', 'three-custom-shader-material', 'three']
+    },
+    optimizeDeps: {
+      force: true,
+      include: ['three', '@tresjs/core', '@tresjs/cientos']
     }
   },
 

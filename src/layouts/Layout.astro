@@ -1,32 +1,26 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import MusicPlayer from '@components/common/MusicPlayer.vue';
+
+interface Props { title?: string; description?: string; }
+const { title = 'Edward Oliva · Frontend Developer', description = 'Portfolio de Edward Oliva, desarrollador frontend.' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Edward Portfolio</title>
+		<title>{title}</title>
+    <meta name="description" content={description} />
     <ClientRouter />
 	</head> 
-	<body class="flex min-h-screen bg-black">
+	<body class="flex min-h-screen bg-black text-slate-50">
+    <MusicPlayer client:load transition:persist="music" src="/audio/track.mp3" title="FFVII REMAKE: Credits (FINAL FANTASY VII REMAKE Original Soundtrack)" />
 		<slot />
 	</body>
 </html>
-
-
-<style is:global>
-  :root {
-    --bg-color: #010101;
-    --text-color: #f7fafc;
-  }
-  html{
-    font-family:'Optima', sans-serif;
-    color: var(--text-color);
-  }
-

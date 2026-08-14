@@ -1,0 +1,42 @@
+---
+interface Props {
+  label?: string;
+  number?: string;
+  class?: string;
+}
+
+const { label, number, class: className = "" } = Astro.props;
+---
+
+<section
+  class:list={[
+    "game-panel relative w-full min-w-0 overflow-hidden border border-[#239dde]/30 border-l-[#68d8ff]/70 shadow-[inset_0_0_35px_rgba(0,68,145,.12),0_18px_50px_rgba(0,0,0,.22)] backdrop-blur-md",
+    className
+  ]}
+>
+  {(label || number) && (
+    <header class="flex justify-between gap-4 border-b border-[#239dde]/25 px-4 py-2.5 font-route text-[.68rem] tracking-[.18em] text-[#70d8ff] uppercase">
+      <span>{label}</span>
+      <span>{number}</span>
+    </header>
+  )}
+  <div class="p-[clamp(1rem,3vw,1.5rem)]"><slot /></div>
+</section>
+
+<style>
+  .game-panel {
+    background:
+      linear-gradient(115deg, rgba(13, 62, 111, .32), transparent 45%),
+      rgba(2, 12, 25, .78);
+  }
+  .game-panel::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4rem;
+    height: 1px;
+    background: #67d9ff;
+    box-shadow: 0 0 12px #35b9ef;
+  }
+</style>

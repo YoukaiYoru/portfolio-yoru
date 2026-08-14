@@ -1,0 +1,30 @@
+---
+interface Props { label: string; value: string; href: string; code: string; }
+import Download from '@lucide/astro/icons/download';
+import Mail from '@lucide/astro/icons/mail';
+
+const { label, value, href, code } = Astro.props;
+const external = href.startsWith('http');
+---
+
+<a class="contact-card" href={href} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+  <span class="contact-card__code" aria-hidden="true">
+    {code === 'EM' && <Mail size={22} strokeWidth={1.6} />}
+    {code === 'IN' && <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6.5 8.2H3.3V20h3.2V8.2ZM4.9 3A1.9 1.9 0 1 0 5 6.8 1.9 1.9 0 0 0 4.9 3ZM20.7 13.2c0-3.55-1.9-5.2-4.45-5.2-2.05 0-2.95 1.13-3.46 1.92V8.2H9.6V20h3.2v-5.84c0-1.54.3-3.03 2.2-3.03 1.87 0 1.9 1.76 1.9 3.13V20h3.2l.6-6.8Z" /></svg>}
+    {code === 'GH' && <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.49.09.67-.21.67-.47v-1.68c-2.72.59-3.3-1.16-3.3-1.16-.45-1.13-1.1-1.43-1.1-1.43-.89-.61.07-.6.07-.6.98.07 1.5 1 1.5 1 .88 1.5 2.3 1.07 2.86.82.09-.64.34-1.07.62-1.32-2.17-.25-4.45-1.08-4.45-4.82 0-1.07.38-1.94 1-2.62-.1-.25-.43-1.25.1-2.6 0 0 .82-.26 2.68 1a9.3 9.3 0 0 1 4.88 0c1.86-1.26 2.68-1 2.68-1 .53 1.35.2 2.35.1 2.6.62.68 1 1.55 1 2.62 0 3.75-2.29 4.57-4.47 4.81.35.3.66.88.66 1.78v2.64c0 .26.18.57.68.47A9.8 9.8 0 0 0 12 2.2Z" /></svg>}
+    {code === 'CV' && <Download size={22} strokeWidth={1.6} />}
+  </span>
+  <span class="contact-card__copy"><small>{label}</small><strong>{value}</strong></span>
+  <span class="contact-card__arrow" aria-hidden="true">↗</span>
+</a>
+
+<style>
+  .contact-card { display: grid; grid-template-columns: 3rem 1fr auto; align-items: center; gap: 1rem; padding: 1rem; border: 1px solid rgba(65, 179, 226, .22); background: rgba(4, 18, 36, .66); transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+  .contact-card:hover { transform: translateX(.3rem); border-color: rgba(100, 218, 255, .65); background: rgba(9, 53, 93, .72); }
+  .contact-card__code { display: grid; place-items: center; width: 2.6rem; height: 2.6rem; border: 1px solid #268ec6; color: #67d9ff; transform: rotate(45deg); }
+  .contact-card__code :global(svg) { transform: rotate(-45deg); }
+  .contact-card__copy { display: grid; min-width: 0; }
+  small { color: #5c8ca8; font: .62rem 'Route159-SemiBold', sans-serif; letter-spacing: .16em; text-transform: uppercase; }
+  strong { overflow: hidden; color: #dcecf5; font-size: clamp(.85rem, 2vw, 1.05rem); font-weight: 400; text-overflow: ellipsis; white-space: nowrap; }
+  .contact-card__arrow { color: #5cd5ff; font-size: 1.15rem; }
+</style>

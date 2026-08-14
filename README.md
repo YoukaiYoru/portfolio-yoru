@@ -1,46 +1,39 @@
-# Astro Starter Kit: Basics
+# Edward Oliva — Portfolio
+
+Portfolio inspirado en la interfaz de Final Fantasy VII Remake. Está construido con Astro, Vue, Tailwind CSS v4 y TresJS.
+
+## Comandos
 
 ```sh
-pnpm create astro@latest -- --template basics
+pnpm install
+pnpm dev
+pnpm build
+pnpm preview
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Estructura
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/
+├── assets/
+│   ├── icons/        # SVG usados por la interfaz
+│   └── images/       # Imágenes procesadas por Astro
+├── components/
+│   ├── about/        # Retrato, HUD y habilidades
+│   ├── common/       # Reproductor, reloj y controles compartidos
+│   ├── content/      # Tarjetas de proyectos, experiencia y contacto
+│   ├── game/         # Marco visual, menú, materia y paneles FFVII
+│   └── home/         # Escena 3D y menú de inicio
+├── data/             # Contenido reemplazable del portfolio
+├── layouts/          # Layout de inicio y layout interno
+├── pages/            # Rutas de Astro
+└── styles/           # Tema Tailwind y estilos base globales
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Los recursos estáticos que deben conservar su URL pública viven en `public/`. La carpeta `FF UI Figma/` contiene únicamente referencias de diseño; el código de producción no importa archivos desde ella.
 
-## 🧞 Commands
+## Estilos
 
-All commands are run from the root of the project, from a terminal:
+Los tokens de color y tipografía están definidos mediante `@theme` en `src/styles/global.css`. Se prefieren utilidades Tailwind para layout, responsive, espaciado, tipografía y estados. El CSS encapsulado de cada componente se reserva para pseudo-elementos, máscaras, SVG y fondos multicapa donde una utilidad arbitraria sería menos legible.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+El contenido editable se centraliza en `src/data/portfolio.ts`.

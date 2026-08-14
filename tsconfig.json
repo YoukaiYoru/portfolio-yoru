@@ -16,8 +16,8 @@
       "@assets/*": [
         "./src/assets/*"
       ],
-      "@utils/*": [
-        "./src/utils/*"
+      "@data/*": [
+        "./src/data/*"
       ]
     },
     "jsx": "preserve"

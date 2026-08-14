@@ -1,59 +1,110 @@
 @import "tailwindcss";
 
-    @font-face {
-    font-family: 'Optima';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Optima'), url('/fonts/OPTIMA.woff') format('woff');
-    }
-    
+@theme {
+  --font-display: 'Optima', 'Segoe UI', sans-serif;
+  --font-route: 'Route159-SemiBold', sans-serif;
 
-    @font-face {
-    font-family: 'Optima Italic';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Optima Italic'), url('/fonts/Optima_Italic.woff') format('woff');
-    }
-    
+  --color-ff-bg: #0046d6;
+  --color-ff-hover: #1daae7;
+  --color-ff-border: #1896eb;
+  --color-ff-line: #0eadc3;
+  --color-ff-line-left: #004a8b;
+  --color-game-bg: #05101e;
+  --color-game-border: #1e4a72;
+  --color-game-accent: #4ea8de;
+  --color-game-active: #0d2d4a;
+  --color-game-text: #c8dff0;
+  --color-game-dim: #5a8aaa;
+  --color-game-panel: #040e1a;
+  --color-section-bg: #002f54;
 
-    @font-face {
-    font-family: 'Optima Medium';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Optima Medium'), url('/fonts/Optima%20Medium.woff') format('woff');
-    }
-    
+  --breakpoint-xs: 30rem;
+}
 
-    @font-face {
-    font-family: 'Optima Bold';
-    font-style: normal;
-    font-weight: normal;
-    src: local('Optima Bold'), url('/fonts/OPTIMA_B.woff') format('woff');
-    }
+@font-face {
+  font-family: 'Optima';
+  src: local('Optima'), url('/fonts/OPTIMA.woff') format('woff');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 
-    @font-face {
-        font-family: 'Route159-SemiBold';
-        src:url('/fonts/Route159-SemiBold.ttf.woff') format('woff'),
-            url('/fonts/Route159-SemiBold.ttf.svg#Route159-SemiBold') format('svg'),
-            url('/fonts/Route159-SemiBold.ttf.eot'),
-            url('/fonts/Route159-SemiBold.ttf.eot?#iefix') format('embedded-opentype'); 
-        font-weight: normal;
-        font-style: normal;
-    }
-    @theme {
-      --font-display: 'Optima', sans-serif;
-      --font-route: 'Route159-SemiBold', sans-serif;
-      --color-ffbg: #0046D6;
-      --color-ffhover: #1DAAE7;
-      --color-ffborder:#1896EB;
-      --color-ffline: #0EADC3;
-      --color-fflineleft:#004A8B;
-      --color-game-bg:     #05101e;
-      --color-game-border: #1e4a72;
-      --color-game-accent: #4ea8de;
-      --color-game-active: #0d2d4a;
-      --color-game-text:   #c8dff0;
-      --color-game-dim:    #5a8aaa;
-      --color-game-panel:  #040e1a;
-    }
+@font-face {
+  font-family: 'Route159-SemiBold';
+  src: url('/fonts/Route159-SemiBold.ttf.woff') format('woff');
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
 
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    min-width: 320px;
+    scroll-behavior: smooth;
+    color-scheme: dark;
+    background: #01050b;
+  }
+
+  body {
+    margin: 0;
+    background: #01050b;
+  }
+
+  body,
+  button,
+  input,
+  textarea {
+    font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+  }
+
+  p,
+  dd,
+  li {
+    overflow-wrap: anywhere;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid #68d8ff;
+    outline-offset: 4px;
+  }
+
+  ::selection {
+    color: #fff;
+    background: rgb(29 170 231 / 65%);
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #020916; }
+  ::-webkit-scrollbar-thumb { background: #155b88; border: 2px solid #020916; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -1,9 +1,12 @@
 ---
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
-import FFMenu from '@components/FFMenu.astro';
-import Time from '@components/Time.vue';
-import BackButtonKey from '@components/BackButtonKey.vue';
+import BackButtonKey from '@components/common/BackButtonKey.vue';
+import MusicPlayer from '@components/common/MusicPlayer.vue';
+import Time from '@components/common/Time.vue';
+import FFMenu from '@components/game/FFMenu.astro';
+import GameBackground from '@components/game/GameBackground.astro';
+import MateriaOrb from '@components/game/MateriaOrb.astro';
 
 interface Props {
   title?: string;
@@ -14,43 +17,351 @@ const { title = "Edward Portfolio" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+    <meta name="description" content={`${title} · Portfolio de Edward Oliva, desarrollador frontend.`} />
     <ClientRouter />
 	</head> 
-	<body class="flex min-h-screen bg-black">
-    <div class="relative bg-[url('/src/assets/bg-menu2.png')] bg-center bg-no-repeat bg-contain min-h-[calc(100vh-2rem)] w-[calc(100%-2rem)] m-4 flex flex-col text-center">
-    <aside class="absolute top-11 left-11 flex flex-row items-start ">
-      <h1 class="text-[40px] [writing-mode:vertical-rl] rotate-360 ">
-        {title}
-      </h1>
-      <FFMenu />
-    </aside>
-  <main class="flex flex-1 items-center justify-end">
-    <slot />
-    </main>
-  <footer class="mt-auto flex w-full items-end justify-between">
-    <Time client:load />
-    <BackButtonKey client:load />
-    </footer>
-  </div>
+	<body class="min-h-screen overflow-hidden bg-black text-slate-50">
+    <MusicPlayer client:load transition:persist="music" src="/audio/track.mp3" title="FFVII REMAKE: Credits (FINAL FANTASY VII REMAKE Original Soundtrack)" />
+    <div class="game-shell">
+      <GameBackground accentRgb="29, 170, 231" secondaryRgb="0, 70, 214" intensity={1} />
+      <div class="game-topbar" aria-hidden="true"></div>
+      <div class="game-shell__frame" aria-hidden="true">
+        <span class="frame-node frame-node--tl"></span>
+        <span class="frame-node frame-node--tr"></span>
+        <span class="frame-node frame-node--bl"></span>
+        <span class="frame-node frame-node--br"></span>
+      </div>
+
+      <header class="mobile-header flex min-[1120px]:hidden">
+        <a href="/" class="mobile-header__brand">EO<span>| Portfolio</span></a>
+        <span class="mobile-header__title">{title}</span>
+      </header>
+
+      <aside class="section-rail hidden min-[1120px]:flex">
+        <div class="section-rail__title">
+          <h1>{title}</h1>
+        </div>
+        <div class="section-rail__menu">
+          <FFMenu />
+          <div class="section-rail__materia" aria-label="Materias equipadas">
+            <MateriaOrb color="green" size="sm" label="Python" tooltip="Python · lenguaje de programación y automatización" />
+            <MateriaOrb color="blue" size="sm" label="AWS" tooltip="AWS · servicios y arquitectura cloud" />
+            <MateriaOrb color="purple" size="sm" label="SQL" tooltip="SQL · consultas y gestión de bases de datos" />
+            <span>UI loadout</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="game-content">
+        <slot />
+      </main>
+
+      <footer class="game-footer hidden min-[1120px]:flex">
+        <Time client:load />
+        <BackButtonKey client:load />
+      </footer>
+
+  <!-- Navegación compacta para móviles y tablets. -->
+	  <nav class="mobile-nav min-[1120px]:hidden" aria-label="Navegación principal">
+	    <FFMenu compact />
+	  </nav>
+    </div>
 	</body>
 </html>
 
 
 <style is:global>
-  :root {
-    --bg-color: #010101;
-    --text-color: #f7fafc;
-  }
   html{
-    font-family:'Optima', sans-serif;
-    color: var(--text-color);
+    height: 100%;
+    overflow: hidden;
   }
+
+  body { width: 100%; max-width: 100%; height: 100%; overflow: hidden; }
+
+  .game-shell {
+    --frame-gutter: clamp(2.5rem, 4vw, 5rem);
+    position: relative;
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
+    background: #000;
+  }
+
+  .game-topbar {
+    position: fixed;
+    z-index: 15;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 4rem;
+    pointer-events: none;
+    background: linear-gradient(180deg, #000 0%, rgba(0, 2, 7, .99) 72%, rgba(2, 12, 25, .96) 100%);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, .38), 0 1px 12px rgba(29, 170, 231, .1);
+  }
+
+  .game-topbar::after {
+    content: '';
+    position: absolute;
+    right: var(--frame-gutter);
+    bottom: .35rem;
+    left: var(--frame-gutter);
+    height: 1px;
+    opacity: .45;
+    background: linear-gradient(90deg, transparent, rgba(60, 205, 250, .6) 8%, rgba(60, 205, 250, .25) 82%, transparent);
+  }
+
+  .game-shell__frame {
+    position: fixed;
+    z-index: 45;
+    top: 4rem;
+    right: var(--frame-gutter);
+    bottom: 3rem;
+    left: var(--frame-gutter);
+    pointer-events: none;
+    border: 1px solid rgba(69, 198, 241, .48);
+    box-shadow: inset 0 0 0 5px rgba(3, 20, 40, .72), inset 0 0 22px rgba(29, 170, 231, .06);
+  }
+
+  .game-shell__frame::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-top: 1px solid rgba(72, 199, 241, .2);
+    border-left: 1px solid rgba(72, 199, 241, .13);
+  }
+
+  .frame-node {
+    --node-width: 2rem;
+    --node-height: 4.5rem;
+    position: absolute;
+    z-index: 2;
+    width: var(--node-width);
+    height: var(--node-height);
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(72, 211, 255, .12) 18%, rgba(72, 211, 255, .62) 50%, rgba(72, 211, 255, .12) 82%, transparent 100%) center / 100% 1px no-repeat,
+      linear-gradient(transparent 0%, rgba(72, 211, 255, .12) 18%, rgba(72, 211, 255, .62) 50%, rgba(72, 211, 255, .12) 82%, transparent 100%) center / 1px 100% no-repeat;
+    filter: drop-shadow(0 0 4px rgba(29, 170, 231, .32));
+  }
+
+  .frame-node::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: .5rem;
+    height: .5rem;
+    border: 1px solid rgba(88, 220, 255, .82);
+    background: #010711;
+    box-shadow: 0 0 7px rgba(29, 170, 231, .62), inset 0 0 4px rgba(29, 170, 231, .32);
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .frame-node::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    background: #72dcff;
+    box-shadow: 0 0 5px rgba(72, 211, 255, .9);
+    transform: translate(-50%, -50%);
+  }
+
+  .frame-node--tl { top: 0; left: 0; transform: translate(-50%, -50%); }
+  .frame-node--tr { top: 0; right: 0; transform: translate(50%, -50%); }
+  .frame-node--bl { bottom: 0; left: 0; transform: translate(-50%, 50%); }
+  .frame-node--br { right: 0; bottom: 0; transform: translate(50%, 50%); }
+
+  .section-rail {
+    position: fixed;
+    z-index: 30;
+    top: 4rem;
+    bottom: 3rem;
+    left: var(--frame-gutter);
+    width: 22rem;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: .15rem;
+  }
+
+  .section-rail__title {
+    --section-band-width: 4.15rem;
+    --section-band-offset: 0rem;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    width: 4.15rem;
+    min-width: 4.15rem;
+    height: 100%;
+    padding: .45rem 0 1rem .5rem;
+    overflow: visible;
+    background: transparent;
+  }
+
+  .section-rail__title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(var(--section-band-offset) + var(--section-band-width));
+    z-index: 2;
+    width: 1px;
+    height: 42%;
+    background: linear-gradient(180deg, rgba(89, 218, 255, .62), rgba(35, 152, 220, .18), transparent);
+    box-shadow: 0 0 8px rgba(48, 184, 235, .24);
+    pointer-events: none;
+  }
+
+  .section-rail__title::after {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    bottom: 0;
+    left: var(--section-band-offset);
+    width: var(--section-band-width);
+    background: var(--color-section-bg);
+    box-shadow: inset -10px 0 24px rgba(0, 6, 18, .2), 7px 0 24px rgba(10, 77, 160, .08);
+    pointer-events: none;
+  }
+
+  .section-rail__title h1 {
+    position: relative;
+    z-index: 1;
+    width: 3.5rem;
+    margin: 0;
+    color: #e9f7ff;
+    font-family: 'Optima', 'Segoe UI', sans-serif;
+    font-size: clamp(3.15rem, 3.6vw, 3.65rem);
+    font-weight: 400;
+    line-height: .86;
+    writing-mode: vertical-rl;
+    transform: translateX(-.5rem);
+    text-shadow: 0 0 18px rgba(64, 190, 239, .24);
+  }
+
+  .section-rail__menu {
+    width: 16.5rem;
+    min-width: 0;
+    margin-top: .65rem;
+  }
+
+  .section-rail__materia {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    margin: 1.25rem 0 0 .5rem;
+  }
+
+  .section-rail__materia > span:last-child {
+    margin-left: .35rem;
+    color: #4e7790;
+    font: .55rem 'Route159-SemiBold', sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .game-content {
+    position: fixed;
+    z-index: 10;
+    top: 4.75rem;
+    right: calc(var(--frame-gutter) + .75rem);
+    bottom: 3rem;
+    left: calc(var(--frame-gutter) + 23rem);
+    min-height: 0;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: rgba(76, 194, 235, .5) rgba(1, 9, 19, .35);
+    scrollbar-width: thin;
+    padding: 0 .75rem 2rem 0;
+  }
+
+  .game-content::-webkit-scrollbar { width: .35rem; }
+  .game-content::-webkit-scrollbar-track { background: rgba(1, 9, 19, .35); }
+  .game-content::-webkit-scrollbar-thumb { background: rgba(76, 194, 235, .5); }
+
+  .game-footer {
+    position: fixed;
+    z-index: 35;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    min-height: 3rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: .25rem calc(var(--frame-gutter) + .75rem);
+    background: linear-gradient(180deg, rgba(1, 8, 17, .98), #000 42%);
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, .36), 0 -1px 12px rgba(29, 170, 231, .08);
+    pointer-events: none;
+  }
+
+  .game-footer > * { pointer-events: auto; }
+
+  .mobile-header {
+    position: fixed;
+    z-index: 35;
+    top: 0;
+    left: 0;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 3.8rem;
+    padding: .8rem 1rem;
+    border-bottom: 1px solid rgba(66, 179, 226, .2);
+    background: rgba(1, 8, 17, .82);
+    backdrop-filter: blur(16px);
+  }
+
+  .mobile-header__brand { display: inline-flex; align-items: center; color: #eaf9ff; font: 1rem 'Route159-SemiBold', sans-serif; white-space: nowrap; }
+  .mobile-header__brand span { margin-left: .38rem; color: #75cae7; font-size: .72rem; font-weight: 400; letter-spacing: .04em; }
+  .mobile-header__title { max-width: 45%; overflow: hidden; color: #99b7ca; font-size: .85rem; text-overflow: ellipsis; white-space: nowrap; }
+
+  .mobile-nav {
+    position: fixed;
+    z-index: 40;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: auto;
+    padding: .4rem .25rem max(.45rem, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(83, 197, 238, .28);
+    background: rgba(1, 7, 16, .92);
+    box-shadow: 0 -12px 30px rgba(0, 0, 0, .35);
+    backdrop-filter: blur(18px);
+  }
+
+  @media (max-width: 1119px) {
+    .game-shell { --frame-gutter: .35rem; overflow: hidden; }
+    .game-shell__frame { top: 4.35rem; right: var(--frame-gutter); bottom: 5.15rem; left: var(--frame-gutter); }
+    .frame-node { --node-width: 1.25rem; --node-height: 3rem; }
+    .game-content { top: 4.7rem; right: 0; bottom: 5rem; left: 0; width: 100%; max-width: 100vw; min-height: 0; overflow-x: hidden; overflow-y: auto; padding: 1rem; }
+    .mobile-header { min-height: 4.35rem; padding: .8rem 1rem; }
+    .mobile-header__title { display: none; }
+    .mobile-nav > nav { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  }
+
+  @media (max-width: 359px) {
+    .mobile-header__brand span { display: none; }
+  }
+
+  @media (min-width: 768px) and (max-width: 1119px) {
+    .game-content { padding: 1.25rem 1.5rem 1.75rem; }
+    .mobile-header { padding-inline: 1.5rem; }
+    .mobile-nav { right: 1rem; bottom: .65rem; left: 1rem; padding-inline: .5rem; }
+  }
+</style>
 

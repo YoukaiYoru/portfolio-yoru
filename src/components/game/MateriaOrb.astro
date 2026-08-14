@@ -1,0 +1,103 @@
+---
+interface Props {
+  color: "red" | "yellow" | "purple" | "green" | "blue";
+  label?: string;
+  tooltip?: string;
+  size?: "sm" | "md" | "lg";
+}
+
+const { color, label, tooltip, size = "md" } = Astro.props;
+---
+
+<span
+  class:list={["materia", `materia--${size}`]}
+  data-tooltip={tooltip ?? label}
+  aria-label={tooltip ?? label ?? `${color} materia`}
+  tabindex={tooltip || label ? "0" : undefined}
+>
+  <span class="materia__slot" aria-hidden="true">
+    <img src={`/materia/materia-${color}.png`} alt="" width="32" height="32" loading="lazy" />
+  </span>
+  {label && <span class="materia__label">{label}</span>}
+</span>
+
+<style>
+  .materia { display: inline-flex; align-items: center; gap: .45rem; color: #9ab8cb; outline: none; }
+  .materia__slot { position: relative; display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid rgba(98, 193, 232, .4); border-radius: 50%; background: radial-gradient(circle, rgba(92, 190, 233, .2), rgba(1, 8, 17, .9) 70%); box-shadow: inset 0 0 10px #000, 0 0 9px rgba(78, 205, 255, .18); }
+  .materia__slot::after { content: ''; position: absolute; inset: -.22rem; border: 1px solid rgba(69, 163, 205, .24); border-radius: 50%; }
+  img { width: 70%; height: 70%; image-rendering: pixelated; filter: saturate(1.35) drop-shadow(0 0 6px currentColor); }
+  .materia__label { font: .6rem 'Route159-SemiBold', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
+  .materia--sm .materia__slot { width: 1.35rem; height: 1.35rem; }
+  .materia--sm .materia__label { display: none; }
+  .materia--lg .materia__slot { width: 3rem; height: 3rem; }
+</style>
+
+<style is:global>
+  .materia-tooltip { position: fixed; z-index: 1000; max-width: min(17rem, calc(100vw - 1.5rem)); padding: .48rem .65rem; border: 1px solid rgba(93, 211, 255, .85); border-radius: 3px; background: linear-gradient(135deg, rgba(5, 31, 57, .98), rgba(1, 11, 25, .98)); box-shadow: 0 0 10px rgba(38, 181, 239, .3), inset 0 0 12px rgba(16, 116, 180, .16); color: #dff8ff; font: .62rem/1.35 'Route159-SemiBold', sans-serif; letter-spacing: .04em; pointer-events: none; text-align: left; }
+  .materia-tooltip::after { content: ''; position: absolute; bottom: -.42rem; left: 50%; border: .25rem solid transparent; border-top-color: rgba(93, 211, 255, .85); transform: translateX(-50%); }
+  .materia-tooltip--below::after { top: -.42rem; bottom: auto; border-top-color: transparent; border-bottom-color: rgba(93, 211, 255, .85); }
+</style>
+
+<script>
+  let tooltip: HTMLDivElement | null = null;
+
+  const getTooltip = () => {
+    if (!tooltip || !tooltip.isConnected) {
+      tooltip = document.createElement('div');
+      tooltip.className = 'materia-tooltip';
+      tooltip.hidden = true;
+      document.body.appendChild(tooltip);
+    }
+    return tooltip;
+  };
+
+  let activeMateria: HTMLElement | null = null;
+
+  const hideTooltip = () => {
+    activeMateria = null;
+    if (tooltip) tooltip.hidden = true;
+  };
+
+  const showTooltip = (materia: HTMLElement) => {
+    const text = materia.dataset.tooltip;
+    if (!text) return;
+    activeMateria = materia;
+    const currentTooltip = getTooltip();
+    currentTooltip.textContent = text;
+    currentTooltip.hidden = false;
+
+    const rect = materia.getBoundingClientRect();
+    const tooltipRect = currentTooltip.getBoundingClientRect();
+    const gap = 10;
+    const top = rect.top >= tooltipRect.height + gap
+      ? rect.top - tooltipRect.height - gap
+      : rect.bottom + gap;
+    currentTooltip.classList.toggle('materia-tooltip--below', top > rect.bottom);
+    const left = Math.max(12, Math.min(
+      window.innerWidth - tooltipRect.width - 12,
+      rect.left + (rect.width / 2) - (tooltipRect.width / 2),
+    ));
+    currentTooltip.style.top = `${top}px`;
+    currentTooltip.style.left = `${left}px`;
+  };
+
+  document.addEventListener('pointerover', (event) => {
+    const materia = (event.target as Element).closest<HTMLElement>('.materia[data-tooltip]');
+    if (materia) showTooltip(materia);
+  });
+  document.addEventListener('pointerout', (event) => {
+    const materia = (event.target as Element).closest<HTMLElement>('.materia[data-tooltip]');
+    const related = event.relatedTarget as Node | null;
+    if (materia && (!related || !materia.contains(related))) hideTooltip();
+  });
+  document.addEventListener('focusin', (event) => {
+    const materia = (event.target as Element).closest<HTMLElement>('.materia[data-tooltip]');
+    if (materia) showTooltip(materia);
+  });
+  document.addEventListener('focusout', (event) => {
+    const materia = (event.target as Element).closest<HTMLElement>('.materia[data-tooltip]');
+    if (materia) hideTooltip();
+  });
+  window.addEventListener('scroll', hideTooltip, true);
+  window.addEventListener('resize', hideTooltip);
+</script>

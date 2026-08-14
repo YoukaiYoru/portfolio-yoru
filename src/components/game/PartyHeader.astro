@@ -1,0 +1,18 @@
+---
+import MateriaOrb from "./MateriaOrb.astro";
+
+type MateriaColor = "red" | "yellow" | "purple" | "green" | "blue";
+interface Props { label: string; mode: string; meta?: string; materia?: MateriaColor[]; }
+const { label, mode, meta = "Equipped materia", materia = [] } = Astro.props;
+---
+
+<header class="flex min-h-14.5 items-center justify-between gap-4 border-y border-[#43bbe8]/35 bg-linear-to-r from-[#187cbf]/30 to-transparent">
+  <div class="flex min-w-0 self-stretch items-center gap-4.5 border-l-3 border-[#a6eeff] px-3 shadow-[inset_8px_0_20px_rgba(50,180,236,.18)] sm:px-4">
+    <span class="truncate text-[1.35rem] text-[#edf9ff]">{label}</span>
+    <strong class="hidden whitespace-nowrap font-route text-[.62rem] tracking-[.14em] text-[#54c9ef] uppercase min-[601px]:block">{mode}</strong>
+  </div>
+  <div class="flex items-center gap-2 pr-4">
+    <span class="hidden whitespace-nowrap font-route text-[.62rem] tracking-[.14em] text-[#54c9ef] uppercase min-[601px]:block">{meta}</span>
+    <div class="flex items-center gap-2">{materia.map(color => <MateriaOrb color={color} size="sm" />)}</div>
+  </div>
+</header>

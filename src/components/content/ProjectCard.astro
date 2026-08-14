@@ -1,0 +1,116 @@
+---
+import GameVector from "@components/game/GameVector.astro";
+import MateriaOrb from "@components/game/MateriaOrb.astro";
+import type { Project } from "@data/types";
+
+interface Props { project: Project; }
+const { project } = Astro.props;
+
+const materiaTooltips: Record<string, string> = {
+  green: 'Node.js · runtime JavaScript para backend',
+  blue: 'PostgreSQL · base de datos relacional',
+  yellow: 'Docker · contenedores y despliegues reproducibles',
+  purple: 'SQL · consultas y gestión de datos',
+  red: 'GitHub Actions · automatización CI/CD',
+};
+---
+
+<article class="loadout-row">
+  <div class="loadout-row__icon">
+    <span><GameVector icon={project.icon} label={project.type} size="1.9rem" /></span>
+  </div>
+
+  <div class="loadout-row__body">
+    <header>
+      <div>
+        <span class="loadout-row__index">{project.number}</span>
+        <h2>
+          {project.href
+            ? <a href={project.href} target="_blank" rel="noreferrer">{project.title}</a>
+            : project.title}
+        </h2>
+      </div>
+      <span class="loadout-row__status">{project.status}</span>
+    </header>
+
+    <div class="loadout-row__stats">
+      <span>ATK <strong>{82 + Number(project.number) * 3}</strong></span>
+      <span>DEF <strong>{64 + Number(project.number) * 4}</strong></span>
+      <span>LV <strong>0{project.number}</strong></span>
+    </div>
+
+    <p>{project.description}</p>
+
+    <footer>
+      <ul aria-label="Tecnologías">{project.stack.map(item => <li>{item}</li>)}</ul>
+      <strong>{project.result}</strong>
+    </footer>
+  </div>
+
+  <div class="loadout-row__materia" aria-label="Materias equipadas">
+    {project.materia.map(color => <MateriaOrb color={color} size="sm" tooltip={materiaTooltips[color]} />)}
+  </div>
+</article>
+
+<style>
+  .loadout-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    min-height: 9.5rem;
+    padding: 1.15rem 1rem;
+    border-bottom: 1px solid rgba(44, 177, 229, .32);
+    background: linear-gradient(90deg, rgba(5, 71, 135, .2), transparent 72%);
+    transition: background .22s ease, transform .22s ease;
+    overflow: hidden;
+  }
+  .loadout-row::before { content: ''; position: absolute; z-index: 3; top: 0; bottom: 0; left: 0; width: 4px; opacity: 0; background: #fff; box-shadow: 0 0 12px rgba(255, 255, 255, .9), 0 0 28px rgba(29, 170, 231, .95), inset -8px 0 16px rgba(59, 130, 246, .65); transition: opacity .22s ease; }
+  .loadout-row::after { content: ''; position: absolute; right: 0; bottom: -2px; width: .35rem; height: .35rem; border: 1px solid #37bce9; transform: rotate(45deg); }
+  .loadout-row:hover { z-index: 2; transform: translateX(.3rem); background: linear-gradient(90deg, rgba(29, 170, 231, .48), rgba(9, 63, 119, .24) 48%, rgba(2, 15, 31, .18)); box-shadow: inset 10px 0 24px rgba(59, 130, 246, .2); }
+  .loadout-row:hover::before { opacity: 1; }
+  .loadout-row__icon { display: grid; place-items: start center; padding-top: .45rem; }
+  .loadout-row__icon > span { display: grid; width: 3.2rem; height: 3.2rem; line-height: 0; place-items: center; border: 2px solid #18b9ef; background: #020b16; transform: rotate(45deg); box-shadow: 0 0 0 4px rgba(6, 113, 174, .26), 0 0 18px rgba(0, 191, 255, .2); }
+  .loadout-row__icon :global(.game-vector) { transform: rotate(-45deg); }
+  .loadout-row__body { min-width: 0; }
+  header { display: flex; justify-content: space-between; gap: 1rem; }
+  header > div { display: flex; align-items: baseline; gap: .7rem; min-width: 0; }
+  h2 { overflow: hidden; color: #e6f4fb; font-size: clamp(1.45rem, 2.5vw, 2.2rem); font-weight: 400; line-height: 1.1; text-overflow: ellipsis; white-space: nowrap; }
+  h2 a { transition: color .2s ease, text-shadow .2s ease; }
+  h2 a:hover { color: #fff; text-shadow: 0 0 14px rgba(79, 206, 255, .58); }
+  .loadout-row__index, .loadout-row__status { color: #51cdf5; font: .62rem 'Route159-SemiBold', sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+  .loadout-row__status { flex: none; padding-top: .4rem; }
+  .loadout-row__stats { display: flex; gap: 1rem; margin-top: .25rem; color: #24c8f6; font: .65rem 'Route159-SemiBold', sans-serif; }
+  .loadout-row__stats strong { color: #dcecf4; font-size: .92rem; font-weight: 400; }
+  p { max-width: 48rem; margin-top: .35rem; overflow-wrap: anywhere; color: #76cae8; font-size: .9rem; line-height: 1.45; }
+  footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-top: .65rem; }
+  ul { display: flex; flex-wrap: wrap; gap: .4rem; }
+  li { color: #9bb6c7; font-size: .68rem; }
+  li + li::before { content: '·'; margin-right: .4rem; color: #2aaedf; }
+  footer > strong { color: #e9f7ff; font-size: .82rem; font-weight: 400; }
+  .loadout-row__materia { display: flex; align-items: flex-start; gap: .45rem; padding-top: .35rem; }
+  @media (max-width: 680px) {
+    .loadout-row { grid-template-columns: 3rem minmax(0, 1fr); gap: .55rem; min-height: 0; padding: .9rem .4rem; }
+    .loadout-row__icon > span { width: 2.25rem; height: 2.25rem; }
+    .loadout-row__icon :global(.game-vector) { --icon-size: 1.45rem !important; }
+    header > div { gap: .45rem; }
+    h2 { font-size: clamp(1.12rem, 5vw, 1.4rem); }
+    .loadout-row__index { font-size: .55rem; }
+    .loadout-row__stats { gap: .65rem; margin-top: .2rem; font-size: .57rem; }
+    .loadout-row__stats strong { font-size: .8rem; }
+    p { margin-top: .4rem; font-size: .8rem; line-height: 1.5; }
+    footer { gap: .5rem; margin-top: .55rem; }
+    li { font-size: .62rem; }
+    footer > strong { font-size: .72rem; }
+    .loadout-row__materia { grid-column: 2; grid-row: 2; padding-top: 0; }
+    .loadout-row__status { display: none; }
+    footer { align-items: flex-start; flex-direction: column; }
+  }
+  @media (max-width: 390px) {
+    .loadout-row { grid-template-columns: 2.6rem minmax(0, 1fr); gap: .4rem; padding-inline: .25rem; }
+    .loadout-row__icon > span { width: 2rem; height: 2rem; }
+    .loadout-row__icon :global(.game-vector) { --icon-size: 1.25rem !important; }
+    h2 { font-size: 1.05rem; }
+    p { font-size: .76rem; }
+  }
+</style>

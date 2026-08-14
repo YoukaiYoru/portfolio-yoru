@@ -1,0 +1,37 @@
+---
+interface Props {
+  name: string;
+  role: string;
+}
+
+const { name, role } = Astro.props;
+
+// first word large, remainder smaller (e.g. "Cloud" / "Strife")
+const parts = name.trim().split(/\s+/);
+const first = parts.shift() ?? "";
+const last = parts.join(" ");
+---
+
+<div class="pointer-events-none select-none relative mt-2 sm:mt-3 md:mt-5 flex items-start gap-0 h-full w-full">
+  {/* soft materia glow column behind, full height, faded top & bottom */}
+
+
+  {/* role tag */}
+  <span
+    class="shrink-0 [writing-mode:vertical-rl] px-1 mx-1 sm:mx-2 mr-0.5 sm:mr-1 py-0.5 bg-[#05132D] border border-[#7B7322] text-[#B7BC2C] text-[8px] sm:text-[9px] md:text-[10px] font-bold uppercase tracking-[0.35em] shadow-[2px_2px_2px_rgba(0,0,0,0.65)]"
+  >
+    {role}
+  </span>
+
+  {/* bright cyan core line, fades to transparent at both ends */}
+  <hr
+    class="h-36 sm:h-44 md:h-60 w-px border-0 bg-linear-to-b from-transparent via-[#00FFFF] to-transparent shadow-[0_0_8px_rgba(0,255,255,0.7),0_0_24px_rgba(59,130,246,0.5)]"
+  />
+
+  {/* name */}
+  <h2
+    class="-ml-1 pl-0 pr-1 sm:pr-2 py-0 [writing-mode:vertical-rl] font-bold leading-[0.78] tracking-wide text-[#AECFE0]/85 drop-shadow-[2px_2px_2px_rgba(0,0,0,0.35)]"
+  >
+    <span class="py-0 text-xl sm:text-2xl md:text-3xl lg:text-4xl">{first}</span>{last && <span class="py-0 text-xs sm:text-sm md:text-lg lg:text-xl"> {last}</span>}
+  </h2>
+</div>

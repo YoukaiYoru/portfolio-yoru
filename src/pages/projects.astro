@@ -1,9 +1,56 @@
 ---
-import FFMenu from "@components/FFMenu.astro";
 import LayoutPrincipal from "../layouts/LayoutPrincipal.astro";
-
+import GamePanel from "@components/game/GamePanel.astro";
+import GameVector from "@components/game/GameVector.astro";
+import PartyHeader from "@components/game/PartyHeader.astro";
+import ProjectCard from "@components/content/ProjectCard.astro";
+import { projects } from "@data/projects";
 ---
 
 <LayoutPrincipal title="Projects">
-  
+  <div class="party-page">
+    <PartyHeader label="Projects" mode="Loadout" meta="Selected work" materia={["green", "blue", "yellow"]} />
+
+    <div class="party-layout">
+      <GamePanel label="Equipped projects" number={`${projects.length} slots`}>
+        <div class="loadout-list">{projects.map(project => <ProjectCard project={project} />)}</div>
+      </GamePanel>
+
+      <aside class="project-stats">
+        <GamePanel label="Portfolio attributes" number={`LV. 0${projects.length}`}>
+          <div class="project-stats__hero">
+            <GameVector icon="database" size="4.5rem" label="Portfolio loadout" />
+            <div><span>Class</span><h2>Software Dev<br />Cloud &amp; DevOps</h2></div>
+          </div>
+          <dl>
+            <div><dt>AWS</dt><dd>90</dd></div>
+            <div><dt>NJS</dt><dd>80</dd></div>
+            <div><dt>CICD</dt><dd>80</dd></div>
+            <div><dt>SQL</dt><dd>70</dd></div>
+          </dl>
+          <p>Cada proyecto funciona como una pieza de equipamiento: tecnologías, resultados y materias representan su configuración.</p>
+        </GamePanel>
+      </aside>
+    </div>
+  </div>
 </LayoutPrincipal>
+
+<style>
+  .party-page { display: grid; gap: 1rem; max-width: 84rem; margin: 0 auto; }
+  .party-layout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(15rem, .55fr); gap: 1rem; align-items: start; }
+  .loadout-list { margin: clamp(-1rem, -3vw, -1.5rem); }
+  .project-stats { position: sticky; top: 5rem; }
+  .project-stats__hero { display: flex; align-items: center; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(70, 189, 233, .22); }
+  .project-stats__hero span { color: #58ccef; font: .6rem 'Route159-SemiBold', sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+  .project-stats__hero h2 { font-size: 1.7rem; font-weight: 400; line-height: 1; }
+  dl { display: grid; gap: .35rem; margin-top: 1rem; }
+  dl div { display: flex; justify-content: space-between; padding: .35rem .5rem; background: rgba(10, 65, 109, .22); }
+  dt { color: #44c4ef; } dd { color: #f0f9ff; font-size: 1.1rem; }
+  .project-stats p { margin-top: 1rem; color: #7c9fb4; font-size: .82rem; line-height: 1.55; }
+  @media (max-width: 1100px) { .party-layout { grid-template-columns: minmax(0, 1fr); } .project-stats { position: static; } }
+  @media (max-width: 600px) {
+    .party-page { gap: .65rem; }
+    .loadout-list { margin: -.75rem; }
+    .project-stats__hero h2 { font-size: 1.35rem; }
+  }
+</style>
