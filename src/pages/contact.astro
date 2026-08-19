@@ -15,17 +15,17 @@ import { profile } from "@data/profile";
       <GamePanel label="Open channel" number="Online">
         <div class="contact-cta">
           <span class="availability"><i></i>{profile.availability}</span>
-          <h2>Tu próxima idea puede empezar con un mensaje.</h2>
-          <p>Cuéntame el contexto, el objetivo y el estado actual del proyecto. Responderé con preguntas concretas y un siguiente paso claro.</p>
-          <a class="primary-action" href={`mailto:${profile.email}?subject=Nuevo proyecto`}>Iniciar conversación <span>↗</span></a>
+          <h2 data-i18n="contact.cta">Tu proxima idea puede empezar con un mensaje.</h2>
+          <p data-i18n="contact.ctaDesc">Cuentame el contexto, el objetivo y el estado actual del proyecto. Responderé con preguntas concretas y un siguiente paso claro.</p>
+          <a class="primary-action" href={`mailto:${profile.email}?subject=Nuevo proyecto`} data-i18n-subject="contact.emailsubject">Iniciar conversacion <span>↗</span></a>
         </div>
       </GamePanel>
       <div class="contact-links">
         {contactLinks.map(link => <ContactCard {...link} />)}
-        <div class="response-card"><span>Response time</span><strong>24 — 48h</strong><p>Zona horaria GMT-5 · Lima</p></div>
+        <div class="response-card"><span>Response time</span><strong>24 — 48h</strong><p data-i18n="contact.timezone">Zona horaria GMT-5 · Lima</p></div>
       </div>
     </div>
-    <p class="contact-footnote">No se almacenan datos en este sitio. El botón abre tu cliente de correo predeterminado.</p>
+    <p class="contact-footnote" data-i18n="contact.footnote">No se almacenan datos en este sitio. El boton abre tu cliente de correo predeterminado.</p>
   </div>
 </LayoutPrincipal>
 

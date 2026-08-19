@@ -1,9 +1,9 @@
 ---
-interface Props { label: string; value: string; href: string; code: string; }
+interface Props { label: string; value: string; href: string; code: string; i18nLabel?: string; i18nValue?: string; }
 import Download from '@lucide/astro/icons/download';
 import Mail from '@lucide/astro/icons/mail';
 
-const { label, value, href, code } = Astro.props;
+const { label, value, href, code, i18nLabel, i18nValue } = Astro.props;
 const external = href.startsWith('http');
 ---
 
@@ -14,7 +14,7 @@ const external = href.startsWith('http');
     {code === 'GH' && <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.2a9.8 9.8 0 0 0-3.1 19.1c.49.09.67-.21.67-.47v-1.68c-2.72.59-3.3-1.16-3.3-1.16-.45-1.13-1.1-1.43-1.1-1.43-.89-.61.07-.6.07-.6.98.07 1.5 1 1.5 1 .88 1.5 2.3 1.07 2.86.82.09-.64.34-1.07.62-1.32-2.17-.25-4.45-1.08-4.45-4.82 0-1.07.38-1.94 1-2.62-.1-.25-.43-1.25.1-2.6 0 0 .82-.26 2.68 1a9.3 9.3 0 0 1 4.88 0c1.86-1.26 2.68-1 2.68-1 .53 1.35.2 2.35.1 2.6.62.68 1 1.55 1 2.62 0 3.75-2.29 4.57-4.47 4.81.35.3.66.88.66 1.78v2.64c0 .26.18.57.68.47A9.8 9.8 0 0 0 12 2.2Z" /></svg>}
     {code === 'CV' && <Download size={22} strokeWidth={1.6} />}
   </span>
-  <span class="contact-card__copy"><small>{label}</small><strong>{value}</strong></span>
+  <span class="contact-card__copy"><small data-i18n={i18nLabel}>{label}</small><strong data-i18n={i18nValue}>{value}</strong></span>
   <span class="contact-card__arrow" aria-hidden="true">↗</span>
 </a>
 

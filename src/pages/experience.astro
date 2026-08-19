@@ -20,10 +20,10 @@ import { certifications } from "@data/certifications";
       <GamePanel label="Education" number="Active">
         {education.map(item => (
           <article class="education-card">
-            <span>{item.period}</span>
-            <h2>{item.degree}</h2>
+            <span data-i18n="edu.period">{item.period}</span>
+            <h2 data-i18n="edu.degree">{item.degree}</h2>
             <p>{item.institution} · {item.location}</p>
-            <small>{item.detail}</small>
+            <small data-i18n="edu.detail">{item.detail}</small>
           </article>
         ))}
       </GamePanel>
@@ -33,7 +33,7 @@ import { certifications } from "@data/certifications";
           {certifications.map(item => (
             <li>
               <div><strong>{item.name}</strong><span>{item.issuer}</span></div>
-              <div><span>{item.date}</span><small class:list={{ pending: item.status === 'Pending' }}>{item.status}</small></div>
+              <div><span data-i18n={item.dateKey}>{item.date}</span><small class:list={{ pending: item.status === 'Pending' }}>{item.status}</small></div>
             </li>
           ))}
         </ul>
@@ -42,7 +42,7 @@ import { certifications } from "@data/certifications";
 
     <aside class="experience-note">
       <span>Next objective</span>
-      <p>Seguir desarrollando soluciones backend y cloud que automaticen procesos, protejan la infraestructura y conviertan datos en resultados útiles.</p>
+      <p data-i18n="exp.objective">Seguir desarrollando soluciones backend y cloud que automaticen procesos, protejan la infraestructura y conviertan datos en resultados utiles.</p>
     </aside>
   </div>
 </LayoutPrincipal>

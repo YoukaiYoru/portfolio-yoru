@@ -1,11 +1,11 @@
 ---
-interface Props { name: string; level: number; category: string; }
-const { name, level, category } = Astro.props;
+interface Props { name: string; level: number; category: string; i18nKey?: string; }
+const { name, level, category, i18nKey } = Astro.props;
 ---
 
 <div class="skill-meter">
   <div class="skill-meter__top">
-    <div><span>{category}</span><strong>{name}</strong></div>
+    <div><span>{category}</span><strong data-i18n={i18nKey}>{name}</strong></div>
     <output>{level}</output>
   </div>
   <div class="skill-meter__track" role="meter" aria-label={name} aria-valuenow={level} aria-valuemin="0" aria-valuemax="100">

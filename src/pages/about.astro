@@ -20,14 +20,14 @@ import { skills } from "@data/skills";
         <GamePanel label="Character information" number="LV. 08">
           <div class="identity">
             <div class="identity__icon"><GameVector icon="database" label="Developer class" size="3.4rem" /></div>
-            <div><span>Active class</span><h1>{profile.role}</h1><p>{profile.about}</p></div>
+            <div><span data-i18n="about.class">Active class</span><h1 data-i18n="profile.role">{profile.role}</h1><p data-i18n="profile.about">{profile.about}</p></div>
           </div>
 
           <dl class="parameters">
-            <div><dt>Location</dt><dd>{profile.location}</dd></div>
-            <div><dt>Speciality</dt><dd>{profile.specialties.join(" · ")}</dd></div>
-            <div><dt>Current quest</dt><dd>{profile.focus}</dd></div>
-            <div><dt>Status</dt><dd class="online">{profile.availability}</dd></div>
+            <div><dt data-i18n="about.location">Location</dt><dd data-i18n="profile.location">{profile.location}</dd></div>
+            <div><dt data-i18n="about.speciality">Speciality</dt><dd data-i18n="profile.specialties">{profile.specialties.join(" · ")}</dd></div>
+            <div><dt data-i18n="about.quest">Current quest</dt><dd data-i18n="profile.focus">{profile.focus}</dd></div>
+            <div><dt data-i18n="about.status">Status</dt><dd class="online" data-i18n="profile.availability">{profile.availability}</dd></div>
           </dl>
         </GamePanel>
 
@@ -35,8 +35,8 @@ import { skills } from "@data/skills";
           <div class="skills-grid">{skills.map(skill => <SkillMeter {...skill} />)}</div>
         </GamePanel>
 
-        <ul class="stats-grid" aria-label="Estadísticas profesionales">
-          {stats.map(stat => <li><strong>{stat.value}</strong><span>{stat.label}</span></li>)}
+        <ul class="stats-grid" data-i18n="stats.aria" data-i18n-attr="aria-label" aria-label="Estadisticas profesionales">
+          {stats.map(stat => <li><strong>{stat.value}</strong><span data-i18n={stat.i18nKey}>{stat.label}</span></li>)}
         </ul>
       </div>
 
@@ -45,9 +45,9 @@ import { skills } from "@data/skills";
           <ImageAbout srcPath={portrait.src} alt={`Retrato profesional de ${profile.name}`} name={profile.name} role="DEV" birthday={profile.birthday} skillCount={skills.length} />
         </GamePanel>
         <div class="materia-notes">
-          <MateriaOrb color="green" label="Python" tooltip="Python · lenguaje de programación y automatización" />
-          <MateriaOrb color="blue" label="AWS" tooltip="AWS · servicios y arquitectura cloud" />
-          <MateriaOrb color="purple" label="SQL" tooltip="SQL · consultas y gestión de bases de datos" />
+          <MateriaOrb color="green" label="Python" tooltip="Python · lenguaje de programacion y automatizacion" i18nKey="materia.python" />
+          <MateriaOrb color="blue" label="AWS" tooltip="AWS · servicios y arquitectura cloud" i18nKey="materia.aws" />
+          <MateriaOrb color="purple" label="SQL" tooltip="SQL · consultas y gestion de bases de datos" i18nKey="materia.sql" />
         </div>
       </aside>
     </div>

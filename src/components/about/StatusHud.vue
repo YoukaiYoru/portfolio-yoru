@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { useLang } from '@lib/lang';
 
 interface Props {
   birthday?: string;
@@ -21,6 +22,8 @@ const props = withDefaults(defineProps<Props>(), {
   careerLevel: 2,
   width: 'min(900px, 120vw)',
 });
+
+const { lang, t } = useLang();
 
 const root = ref<HTMLElement | null>(null);
 const now = ref(new Date());
@@ -86,7 +89,6 @@ const ageStats = computed(() => {
     elapsedDays,
     remainingDays,
     nextAge: age + 1,
-    // extra fields for fractional progress
     lastBirthday,
     nextBirthday,
     totalMs,
@@ -100,15 +102,17 @@ const dayProgress = computed(() => {
   const width = Math.max(2, Math.min(dayBarWidth, dayBarWidth * frac));
   return width;
 });
-const daysTooltip = computed(() => props.birthday
-  ? `${ageStats.value.remainingDays} días para cumplir ${ageStats.value.nextAge}`
-  : 'Fecha de nacimiento pendiente de confirmar');
+
+const daysTooltip = computed(() => {
+  if (!props.birthday) return t('hud.bdaypending');
+  return `${ageStats.value.remainingDays} ${t('hud.daysleft')} ${ageStats.value.nextAge}`;
+});
 
 const energyStats = computed(() => {
   if (props.en !== undefined) {
     return {
       value: props.en,
-      tooltip: `Energía actual · ${props.en}/${props.enMax}`,
+      tooltip: `${t('hud.energy')} · ${props.en}/${props.enMax}`,
     };
   }
 
@@ -119,34 +123,34 @@ const energyStats = computed(() => {
   });
 
   if (hour < 6) {
-    return { value: 0, tooltip: `Descansando zzz · ${hourLabel}` };
+    return { value: 0, tooltip: `${t('hud.resting')} · ${hourLabel}` };
   }
 
   if (hour < 9) {
-    return { value: 25 + ((hour - 6) * 15), tooltip: `Despertando y recargando · ${hourLabel}` };
+    return { value: 25 + ((hour - 6) * 15), tooltip: `${t('hud.waking')} · ${hourLabel}` };
   }
 
   if (hour < 12) {
-    return { value: 70 + ((hour - 9) * 10), tooltip: `Preparado para crear · ${hourLabel}` };
+    return { value: 70 + ((hour - 9) * 10), tooltip: `${t('hud.ready')} · ${hourLabel}` };
   }
 
   if (hour < 18) {
-    return { value: 100, tooltip: `Energía al máximo · ${hourLabel}` };
+    return { value: 100, tooltip: `${t('hud.max')} · ${hourLabel}` };
   }
 
   if (hour < 21) {
-    return { value: 85 - ((hour - 18) * 15), tooltip: `Aún en modo productivo · ${hourLabel}` };
+    return { value: 85 - ((hour - 18) * 15), tooltip: `${t('hud.productive')} · ${hourLabel}` };
   }
 
-  return { value: 40 - ((hour - 21) * 15), tooltip: `Terminando el día · ${hourLabel}` };
+  return { value: 40 - ((hour - 21) * 15), tooltip: `${t('hud.ending')} · ${hourLabel}` };
 });
 
 const focusTooltip = computed(() =>
-  `Concentración al máximo en cada proyecto · ${props.foc}/${props.focMax}`,
+  `${t('hud.focus')} · ${props.foc}/${props.focMax}`,
 );
 
 const skillsTooltip = computed(() =>
-  `${props.skl} habilidades acumuladas y en mejora continua`,
+  `${props.skl} ${t('hud.skills')}`,
 );
 
 function updateNow() {
@@ -168,8 +172,6 @@ onMounted(() => {
   }
   tipElement = tip;
 
-  // Render the tooltip above the portrait/card stacking context so it cannot
-  // be clipped by the HUD container's overflow rules.
   document.body.appendChild(tip);
 
   const show = (target: Element) => {
@@ -281,13 +283,13 @@ onUnmounted(() => {
       </g>
 
       <g>
-        <text class="t-label" filter="url(#sh-glowText)" x="345" y="142" text-anchor="middle">EDAD</text>
+        <text class="t-label" filter="url(#sh-glowText)" x="345" y="142" text-anchor="middle">{{ t('hud.age') }}</text>
         <text class="t-big js-age" filter="url(#sh-glowText)" x="340" y="238" text-anchor="middle" font-size="94">{{ ageStats.age }}</text>
-        <text v-if="props.birthday" class="t-cap abbr js-dias" x="454" y="284" tabindex="0" :data-tip="daysTooltip">DÍAS<title>Días para tu cumpleaños</title></text>
+        <text v-if="props.birthday" class="t-cap abbr js-dias" x="454" y="284" tabindex="0" :data-tip="daysTooltip">{{ t('hud.days') }}<title>{{ t('hud.daystitle') }}</title></text>
         <text v-if="props.birthday" x="340" y="320" text-anchor="middle" font-size="28" font-weight="500">
           <tspan class="js-day-cur" fill="var(--ink)">{{ ageStats.elapsedDays }}</tspan><tspan class="t-dim js-day-max">/{{ ageStats.totalDays }}</tspan>
         </text>
-        <text v-else class="t-cap" x="340" y="315" text-anchor="middle">POR CONFIRMAR</text>
+        <text v-else class="t-cap" x="340" y="315" text-anchor="middle">{{ t('hud.confirm') }}</text>
 
         <text class="t-stat abbr" x="246" y="396" text-anchor="end" tabindex="0" :data-tip="energyStats.tooltip">EN<title>{{ energyStats.tooltip }}</title></text>
         <text class="t-big" x="296" y="400" font-size="50">
@@ -302,7 +304,7 @@ onUnmounted(() => {
         <text class="t-stat abbr" x="144" y="512" text-anchor="end" tabindex="0" :data-tip="skillsTooltip">SKL<title>{{ skillsTooltip }}</title></text>
         <text class="t-big" x="194" y="516" font-size="42">{{ props.skl }}</text>
 
-        <text class="t-tiny" x="278" y="550" text-anchor="middle">Nivel de carrera {{ props.careerLevel }}</text>
+        <text class="t-tiny" x="278" y="550" text-anchor="middle">{{ t('hud.career') }} {{ props.careerLevel }}</text>
       </g>
     </svg>
   </div>

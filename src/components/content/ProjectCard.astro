@@ -10,8 +10,16 @@ const materiaTooltips: Record<string, string> = {
   green: 'Node.js · runtime JavaScript para backend',
   blue: 'PostgreSQL · base de datos relacional',
   yellow: 'Docker · contenedores y despliegues reproducibles',
-  purple: 'SQL · consultas y gestión de datos',
-  red: 'GitHub Actions · automatización CI/CD',
+  purple: 'SQL · consultas y gestion de datos',
+  red: 'GitHub Actions · automatizacion CI/CD',
+};
+
+const materiaI18nKeys: Record<string, string> = {
+  green: 'materia.nodejs',
+  blue: 'materia.postgres',
+  yellow: 'materia.docker',
+  purple: 'materia.sql',
+  red: 'materia.github',
 };
 ---
 
@@ -39,16 +47,16 @@ const materiaTooltips: Record<string, string> = {
       <span>LV <strong>0{project.number}</strong></span>
     </div>
 
-    <p>{project.description}</p>
+    <p data-i18n="projects.desc.moodiary">{project.description}</p>
 
     <footer>
-      <ul aria-label="Tecnologías">{project.stack.map(item => <li>{item}</li>)}</ul>
-      <strong>{project.result}</strong>
+      <ul aria-label="Technologies">{project.stack.map(item => <li>{item}</li>)}</ul>
+      <strong data-i18n="projects.result.moodiary">{project.result}</strong>
     </footer>
   </div>
 
   <div class="loadout-row__materia" aria-label="Materias equipadas">
-    {project.materia.map(color => <MateriaOrb color={color} size="sm" tooltip={materiaTooltips[color]} />)}
+    {project.materia.map(color => <MateriaOrb color={color} size="sm" tooltip={materiaTooltips[color]} i18nKey={materiaI18nKeys[color]} />)}
   </div>
 </article>
 

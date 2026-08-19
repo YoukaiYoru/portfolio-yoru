@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import MusicPlayer from '@components/common/MusicPlayer.vue';
+import LanguageToggle from '@components/common/LanguageToggle.vue';
 
 interface Props { title?: string; description?: string; }
 const { title = 'Edward Oliva · Frontend Developer', description = 'Portfolio de Edward Oliva, desarrollador frontend.' } = Astro.props;
@@ -17,10 +18,24 @@ const { title = 'Edward Oliva · Frontend Developer', description = 'Portfolio d
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
     <meta name="description" content={description} />
+    <script is:inline>
+      try {
+        var s = localStorage.getItem('portfolio-lang');
+        if (s === 'en' || s === 'es') { document.documentElement.lang = s; }
+      } catch(e) {}
+    </script>
     <ClientRouter />
 	</head> 
 	<body class="flex min-h-screen bg-black text-slate-50">
     <MusicPlayer client:load transition:persist="music" src="/audio/track.mp3" title="FFVII REMAKE: Credits (FINAL FANTASY VII REMAKE Original Soundtrack)" />
 		<slot />
+    <div class="fixed bottom-4 right-4 z-50">
+      <LanguageToggle client:load />
+    </div>
 	</body>
 </html>
+
+<script>
+import { initLang } from '@lib/lang';
+initLang();
+</script>

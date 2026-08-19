@@ -2,21 +2,22 @@
 import type { Experience } from "@data/types";
 interface Props { item: Experience; index: number; }
 const { item, index } = Astro.props;
+const i18nPrefix = `exp${index + 1}`;
 ---
 
 <article class="experience-item">
   <div class="experience-item__marker"><span>{String(index + 1).padStart(2, '0')}</span></div>
   <div class="experience-item__content">
     <header>
-      <div><span>{item.period}</span><span>{item.location}</span></div>
-      <h2>{item.role}</h2>
+      <div><span data-i18n={`${i18nPrefix}.period`}>{item.period}</span><span>{item.location}</span></div>
+      <h2 data-i18n={`${i18nPrefix}.role`}>{item.role}</h2>
       <p class="company">{item.company}</p>
     </header>
-    <p class="summary">{item.summary}</p>
+    <p class="summary" data-i18n={`${i18nPrefix}.summary`}>{item.summary}</p>
     <ul class="achievements">
-      {item.achievements.map(achievement => <li>{achievement}</li>)}
+      {item.achievements.map((achievement, ai) => <li data-i18n={`${i18nPrefix}.ach${ai + 1}`}>{achievement}</li>)}
     </ul>
-    <ul class="stack" aria-label="Tecnologías">
+    <ul class="stack" aria-label="Technologies">
       {item.stack.map(technology => <li>{technology}</li>)}
     </ul>
   </div>

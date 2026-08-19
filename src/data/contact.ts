@@ -28,5 +28,7 @@ export const contactLinks: ContactLink[] = [
     href: '/documents/Edward-Oliva-CV.pdf',
     code: 'CV',
     external: true,
+    i18nLabel: 'contact.cvlabel',
+    i18nValue: 'contact.cvvalue',
   },
 ];

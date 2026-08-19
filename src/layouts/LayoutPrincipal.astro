@@ -7,6 +7,7 @@ import Time from '@components/common/Time.vue';
 import FFMenu from '@components/game/FFMenu.astro';
 import GameBackground from '@components/game/GameBackground.astro';
 import MateriaOrb from '@components/game/MateriaOrb.astro';
+import LanguageToggle from '@components/common/LanguageToggle.vue';
 
 interface Props {
   title?: string;
@@ -26,6 +27,12 @@ const { title = "Edward Portfolio" } = Astro.props;
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
     <meta name="description" content={`${title} · Portfolio de Edward Oliva, desarrollador frontend.`} />
+    <script is:inline>
+      try {
+        var s = localStorage.getItem('portfolio-lang');
+        if (s === 'en' || s === 'es') { document.documentElement.lang = s; }
+      } catch(e) {}
+    </script>
     <ClientRouter />
 	</head> 
 	<body class="min-h-screen overflow-hidden bg-black text-slate-50">
@@ -42,7 +49,10 @@ const { title = "Edward Portfolio" } = Astro.props;
 
       <header class="mobile-header flex min-[1120px]:hidden">
         <a href="/" class="mobile-header__brand">EO<span>| Portfolio</span></a>
-        <span class="mobile-header__title">{title}</span>
+        <div class="mobile-header__right">
+          <span class="mobile-header__title">{title}</span>
+          <LanguageToggle client:load />
+        </div>
       </header>
 
       <aside class="section-rail hidden min-[1120px]:flex">
@@ -51,11 +61,14 @@ const { title = "Edward Portfolio" } = Astro.props;
         </div>
         <div class="section-rail__menu">
           <FFMenu />
-          <div class="section-rail__materia" aria-label="Materias equipadas">
-            <MateriaOrb color="green" size="sm" label="Python" tooltip="Python · lenguaje de programación y automatización" />
-            <MateriaOrb color="blue" size="sm" label="AWS" tooltip="AWS · servicios y arquitectura cloud" />
-            <MateriaOrb color="purple" size="sm" label="SQL" tooltip="SQL · consultas y gestión de bases de datos" />
-            <span>UI loadout</span>
+          <div class="section-rail__bottom">
+            <div class="section-rail__materia" aria-label="Materias equipadas">
+              <MateriaOrb color="green" size="sm" label="Python" tooltip="Python · lenguaje de programacion y automatizacion" i18nKey="materia.python" />
+              <MateriaOrb color="blue" size="sm" label="AWS" tooltip="AWS · servicios y arquitectura cloud" i18nKey="materia.aws" />
+              <MateriaOrb color="purple" size="sm" label="SQL" tooltip="SQL · consultas y gestion de bases de datos" i18nKey="materia.sql" />
+              <span>UI loadout</span>
+            </div>
+            <LanguageToggle client:load />
           </div>
         </div>
       </aside>
@@ -69,14 +82,18 @@ const { title = "Edward Portfolio" } = Astro.props;
         <BackButtonKey client:load />
       </footer>
 
-  <!-- Navegación compacta para móviles y tablets. -->
-	  <nav class="mobile-nav min-[1120px]:hidden" aria-label="Navegación principal">
+  <!-- Navegacion compacta para moviles y tablets. -->
+	  <nav class="mobile-nav min-[1120px]:hidden" aria-label="Navegacion principal">
 	    <FFMenu compact />
 	  </nav>
     </div>
 	</body>
 </html>
 
+<script>
+import { initLang } from '@lib/lang';
+initLang();
+</script>
 
 <style is:global>
   html{
@@ -257,11 +274,18 @@ const { title = "Edward Portfolio" } = Astro.props;
     margin-top: .65rem;
   }
 
+  .section-rail__bottom {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-top: 1.25rem;
+    margin-left: .5rem;
+  }
+
   .section-rail__materia {
     display: flex;
     align-items: center;
     gap: .45rem;
-    margin: 1.25rem 0 0 .5rem;
   }
 
   .section-rail__materia > span:last-child {
@@ -328,6 +352,7 @@ const { title = "Edward Portfolio" } = Astro.props;
 
   .mobile-header__brand { display: inline-flex; align-items: center; color: #eaf9ff; font: 1rem 'Route159-SemiBold', sans-serif; white-space: nowrap; }
   .mobile-header__brand span { margin-left: .38rem; color: #75cae7; font-size: .72rem; font-weight: 400; letter-spacing: .04em; }
+  .mobile-header__right { display: flex; align-items: center; gap: .75rem; }
   .mobile-header__title { max-width: 45%; overflow: hidden; color: #99b7ca; font-size: .85rem; text-overflow: ellipsis; white-space: nowrap; }
 
   .mobile-nav {
@@ -364,4 +389,3 @@ const { title = "Edward Portfolio" } = Astro.props;
     .mobile-nav { right: 1rem; bottom: .65rem; left: 1rem; padding-inline: .5rem; }
   }
 </style>
-

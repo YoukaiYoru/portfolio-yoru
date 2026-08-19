@@ -18,12 +18,14 @@ export interface Profile {
 export interface Stat {
   value: string;
   label: string;
+  i18nKey?: string;
 }
 
 export interface Skill {
   name: string;
   level: number;
   category: string;
+  i18nKey?: string;
 }
 
 export interface Project {
@@ -63,6 +65,7 @@ export interface Certification {
   issuer: string;
   date: string;
   status: 'Completed' | 'Pending';
+  dateKey?: string;
 }
 
 export interface ContactLink {
@@ -71,4 +74,6 @@ export interface ContactLink {
   href: string;
   code: string;
   external?: boolean;
+  i18nLabel?: string;
+  i18nValue?: string;
 }

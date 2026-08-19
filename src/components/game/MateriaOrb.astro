@@ -4,9 +4,10 @@ interface Props {
   label?: string;
   tooltip?: string;
   size?: "sm" | "md" | "lg";
+  i18nKey?: string;
 }
 
-const { color, label, tooltip, size = "md" } = Astro.props;
+const { color, label, tooltip, size = "md", i18nKey } = Astro.props;
 ---
 
 <span
@@ -14,6 +15,8 @@ const { color, label, tooltip, size = "md" } = Astro.props;
   data-tooltip={tooltip ?? label}
   aria-label={tooltip ?? label ?? `${color} materia`}
   tabindex={tooltip || label ? "0" : undefined}
+  data-i18n={i18nKey}
+  data-i18n-attr="data-tooltip"
 >
   <span class="materia__slot" aria-hidden="true">
     <img src={`/materia/materia-${color}.png`} alt="" width="32" height="32" loading="lazy" />

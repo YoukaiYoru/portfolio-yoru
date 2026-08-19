@@ -18,6 +18,9 @@
       ],
       "@data/*": [
         "./src/data/*"
+      ],
+      "@lib/*": [
+        "./src/lib/*"
       ]
     },
     "jsx": "preserve"

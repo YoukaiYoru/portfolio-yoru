@@ -12,7 +12,8 @@ export default defineConfig({
       alias: {
         // Map the exact CommonJS import used by @tresjs/cientos to the ESM build
         'three-custom-shader-material/vanilla/dist/three-custom-shader-material-vanilla.cjs.js':
-          'three-custom-shader-material/vanilla/dist/three-custom-shader-material-vanilla.esm.js'
+          'three-custom-shader-material/vanilla/dist/three-custom-shader-material-vanilla.esm.js',
+        '@lib': '/src/lib'
       }
     },
     ssr: {
