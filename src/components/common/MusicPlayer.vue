@@ -36,7 +36,6 @@ function persist() {
   }
 }
 
-// always start at 60% volume; only restore mute pref
 function restore() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -48,7 +47,6 @@ function restore() {
   }
 }
 
-// autoplay; browsers may block until first gesture, so retry on it
 function tryAutoplay() {
   const el = audio.value;
   if (!el) return;
@@ -77,7 +75,6 @@ async function togglePlay() {
   }
 }
 
-// skip forward/back; wraps within looping track
 function seek(delta: number) {
   const el = audio.value;
   if (!el) return;
@@ -112,7 +109,6 @@ function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Escape') showSettings.value = false;
 }
 
-// FFMenu "Settings" link triggers the modal (event delegation survives view transitions)
 function onDocClick(e: MouseEvent) {
   const trigger = (e.target as HTMLElement | null)?.closest('[data-audio-settings]');
   if (trigger) {
@@ -123,12 +119,17 @@ function onDocClick(e: MouseEvent) {
 
 watch(volume, applyVolume);
 
+function onPlay() { isPlaying.value = true; }
+function onPause() { isPlaying.value = false; }
+function onEnded() { isPlaying.value = false; }
+
 onMounted(() => {
   restore();
   const el = audio.value;
   if (el) {
-    el.addEventListener('play', () => (isPlaying.value = true));
-    el.addEventListener('pause', () => (isPlaying.value = false));
+    el.addEventListener('play', onPlay);
+    el.addEventListener('pause', onPause);
+    el.addEventListener('ended', onEnded);
     applyVolume();
     tryAutoplay();
   }
@@ -137,6 +138,12 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
+  const el = audio.value;
+  if (el) {
+    el.removeEventListener('play', onPlay);
+    el.removeEventListener('pause', onPause);
+    el.removeEventListener('ended', onEnded);
+  }
   document.removeEventListener('click', onDocClick);
   window.removeEventListener('keydown', onKeydown);
 });
@@ -146,7 +153,6 @@ onBeforeUnmount(() => {
   <div class="ff-player">
     <audio ref="audio" :src="props.src" loop preload="metadata"></audio>
 
-    <!-- top bar: play/pause toggle + scrolling title -->
     <div class="ff-bar" :class="{ playing: isPlaying, muted }">
       <button class="ff-btn" :aria-label="isPlaying ? 'Pause music' : 'Play music'" @click="togglePlay">
         <svg v-if="isPlaying" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
@@ -170,8 +176,6 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
-    <!-- settings modal (triggered by Settings link); kept inside the persisted
-         island so it survives view transitions — no Teleport (stale body target) -->
     <div v-if="showSettings" class="ff-modal-backdrop" @click.self="showSettings = false">
         <div class="ff-modal" role="dialog" aria-modal="true" aria-label="Audio settings">
           <header class="ff-modal-head">
@@ -183,7 +187,6 @@ onBeforeUnmount(() => {
             </button>
           </header>
 
-          <!-- materia orb -->
           <div class="ff-orb-wrap">
             <div class="ff-orb" :class="{ muted }">
               <div class="ff-orb-fill" :style="{ height: volumePct + '%' }"></div>
@@ -192,11 +195,9 @@ onBeforeUnmount(() => {
             <span class="ff-orb-label">{{ muted ? 'SILENCE' : 'VOLUME' }}</span>
           </div>
 
-          <!-- slider -->
           <input class="ff-slider" type="range" min="0" max="100" :value="volumePct"
             :disabled="muted" aria-label="Volume" @input="onVolumeInput" />
 
-          <!-- seek controls -->
           <div class="ff-seek">
             <button class="ff-seek-btn" aria-label="Back 10 seconds" @click="seek(-10)">&#171; 10s</button>
             <button class="ff-seek-btn" :aria-label="isPlaying ? 'Pause' : 'Play'" @click="togglePlay">
@@ -205,7 +206,6 @@ onBeforeUnmount(() => {
             <button class="ff-seek-btn" aria-label="Forward 10 seconds" @click="seek(10)">10s &#187;</button>
           </div>
 
-          <!-- mute toggle -->
           <button class="ff-mute" :class="{ active: muted }" @click="toggleMute">
             {{ muted ? 'UNMUTE' : 'MUTE' }}
           </button>
@@ -222,7 +222,6 @@ onBeforeUnmount(() => {
   --panel: #040e1a;
 }
 
-/* top bar */
 .ff-bar {
   position: fixed;
   top: 6px;
@@ -239,18 +238,11 @@ onBeforeUnmount(() => {
 }
 
 @media (min-width: 768px) {
-  .ff-bar {
-    right: 6px;
-  }
+  .ff-bar { right: 6px; }
 }
 
 @media (max-width: 767px) {
-  .ff-bar {
-    top: 6px;
-    right: 8px;
-    left: 8.75rem;
-    width: auto;
-  }
+  .ff-bar { top: 6px; right: 8px; left: 8.75rem; width: auto; }
   .ff-marquee-track { font-size: 11px; letter-spacing: 0.1em; }
 }
 
@@ -259,12 +251,9 @@ onBeforeUnmount(() => {
 }
 
 @media (min-width: 1024px) {
-  .ff-bar {
-    right: 6px;
-  }
+  .ff-bar { right: 6px; }
 }
 
-/* play/pause toggle */
 .ff-btn {
   display: inline-flex;
   align-items: center;
@@ -285,7 +274,6 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 16px rgba(29, 170, 231, 0.85);
 }
 
-/* equalizer bars */
 .ff-eq {
   display: flex;
   align-items: flex-end;
@@ -294,10 +282,12 @@ onBeforeUnmount(() => {
   flex: none;
 }
 .ff-eq i {
+  display: block;
   width: 3px;
   height: 5px;
   background: #7fe6ff;
   box-shadow: 0 0 6px rgba(127, 230, 255, 0.8);
+  animation: none;
 }
 .ff-bar.playing .ff-eq i {
   animation: ff-eq 0.9s ease-in-out infinite;
@@ -311,7 +301,6 @@ onBeforeUnmount(() => {
   50% { height: 15px; }
 }
 
-/* scrolling title (right -> left) */
 .ff-marquee {
   position: relative;
   flex: 1 1 auto;
@@ -337,7 +326,6 @@ onBeforeUnmount(() => {
   to { transform: translateX(-50%); }
 }
 
-/* modal */
 .ff-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -390,7 +378,6 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 10px rgba(29, 170, 231, 0.6);
 }
 
-/* materia orb */
 .ff-orb-wrap {
   display: flex;
   flex-direction: column;
@@ -438,7 +425,6 @@ onBeforeUnmount(() => {
   color: #4bcdff;
 }
 
-/* slider */
 .ff-slider {
   width: 100%;
   height: 4px;
@@ -470,7 +456,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
 }
 
-/* seek controls */
 .ff-seek {
   display: flex;
   gap: 8px;
@@ -494,7 +479,6 @@ onBeforeUnmount(() => {
   box-shadow: 0 0 12px rgba(29, 170, 231, 0.6);
 }
 
-/* mute toggle */
 .ff-mute {
   width: 100%;
   padding: 8px;
