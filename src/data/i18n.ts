@@ -24,7 +24,7 @@ export const translations: Record<string, Record<string, string>> = {
 
     'projects.desc.moodiary': 'Diario emocional full-stack para registrar estados de animo, visualizar patrones y revisar el historial. Incluye autenticacion segura, graficos interactivos, frases personalizadas y una API REST.',
     'projects.result.moodiary': 'Demo online',
-    'projects.desc.cartrune': 'Servicio backend desarrollado en Go, actualmente en desarrollo. Proyecto para explorar la construccion de servicios y la organizacion de una aplicacion lista para crecer.',
+    'projects.desc.cartrune': 'Aplicacion mobile-first para coleccionar videojuegos fisicos. Permite escanear o buscar la portada, identificar la plataforma, region y edicion correcta, anadirla a una biblioteca personal y registrar progreso, horas, estado y valoraciones. Actualmente en desarrollo.',
     'projects.result.cartrune': 'En desarrollo',
     'projects.desc.cloud-iac-infra': 'Proyecto de estudio de infraestructura como codigo con Terraform y AWS. Define una VPC, subred publica, bucket S3 para el estado remoto y una instancia EC2 configurada automaticamente con NGINX.',
     'projects.result.cloud-iac-infra': 'AWS + Terraform',
@@ -150,7 +150,7 @@ export const translations: Record<string, Record<string, string>> = {
 
     'projects.desc.moodiary': 'Full-stack emotional diary for recording moods, visualizing patterns, and reviewing history. It includes secure authentication, interactive charts, personalized quotes, and a REST API.',
     'projects.result.moodiary': 'Online demo',
-    'projects.desc.cartrune': 'Backend service built with Go and currently in development. A project focused on exploring service construction and organizing an application ready to grow.',
+    'projects.desc.cartrune': 'Mobile-first app for collecting physical video games. It lets collectors scan or search a cover, identify the correct platform, region, and release, add it to a personal library, and track progress, hours, status, and ratings. Currently in development.',
     'projects.result.cartrune': 'In development',
     'projects.desc.cloud-iac-infra': 'Infrastructure-as-code study project using Terraform and AWS. It defines a VPC, public subnet, S3 bucket for remote state, and an EC2 instance automatically configured with NGINX.',
     'projects.result.cloud-iac-infra': 'AWS + Terraform',

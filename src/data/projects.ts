@@ -24,7 +24,7 @@ export const projects: Project[] = [
     title: 'CartRune',
     type: 'Backend service in development',
     description:
-      'Servicio backend desarrollado en Go, actualmente en desarrollo. Proyecto para explorar la construccion de servicios y la organizacion de una aplicacion lista para crecer.',
+      'Aplicacion mobile-first para coleccionar videojuegos fisicos. Permite escanear o buscar la portada, identificar la plataforma, region y edicion correcta, anadirla a una biblioteca personal y registrar progreso, horas, estado y valoraciones. Actualmente en desarrollo.',
     result: 'En desarrollo',
     status: 'In development',
     featured: true,
