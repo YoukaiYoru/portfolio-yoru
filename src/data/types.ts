@@ -30,6 +30,7 @@ export interface Skill {
 
 export interface Project {
   number: string;
+  slug: string;
   icon: GameIcon;
   materia: MateriaColor[];
   title: string;

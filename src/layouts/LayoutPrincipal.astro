@@ -47,7 +47,7 @@ const { title = "Edward Portfolio" } = Astro.props;
         <span class="frame-node frame-node--br"></span>
       </div>
 
-      <header class="mobile-header flex min-[1120px]:hidden">
+      <header class="mobile-header flex min-[1024px]:hidden">
         <a href="/" class="mobile-header__brand">EO<span>| Portfolio</span></a>
         <div class="mobile-header__right">
           <span class="mobile-header__title">{title}</span>
@@ -55,7 +55,7 @@ const { title = "Edward Portfolio" } = Astro.props;
         </div>
       </header>
 
-      <aside class="section-rail hidden min-[1120px]:flex">
+      <aside class="section-rail hidden min-[1024px]:flex">
         <div class="section-rail__title">
           <h1>{title}</h1>
         </div>
@@ -77,13 +77,13 @@ const { title = "Edward Portfolio" } = Astro.props;
         <slot />
       </main>
 
-      <footer class="game-footer hidden min-[1120px]:flex">
+      <footer class="game-footer hidden min-[1024px]:flex">
         <Time client:load />
         <BackButtonKey client:load />
       </footer>
 
   <!-- Navegacion compacta para moviles y tablets. -->
-	  <nav class="mobile-nav min-[1120px]:hidden" aria-label="Navegacion principal">
+	  <nav class="mobile-nav min-[1024px]:hidden" aria-label="Navegacion principal">
 	    <FFMenu compact />
 	  </nav>
     </div>
@@ -369,7 +369,7 @@ initLang();
     backdrop-filter: blur(18px);
   }
 
-  @media (max-width: 1119px) {
+  @media (max-width: 1023px) {
     .game-shell { --frame-gutter: .35rem; overflow: hidden; }
     .game-shell__frame { top: 4.35rem; right: var(--frame-gutter); bottom: 5.15rem; left: var(--frame-gutter); }
     .frame-node { --node-width: 1.25rem; --node-height: 3rem; }
@@ -383,9 +383,17 @@ initLang();
     .mobile-header__brand span { display: none; }
   }
 
-  @media (min-width: 768px) and (max-width: 1119px) {
+  @media (min-width: 768px) and (max-width: 1023px) {
     .game-content { padding: 1.25rem 1.5rem 1.75rem; }
     .mobile-header { padding-inline: 1.5rem; }
     .mobile-nav { right: 1rem; bottom: .65rem; left: 1rem; padding-inline: .5rem; }
+  }
+
+  @media (min-width: 1024px) and (max-width: 1399px) {
+    .game-shell { --frame-gutter: clamp(1.5rem, 3vw, 2.5rem); }
+    .section-rail { width: 19rem; }
+    .section-rail__menu { width: 14rem; }
+    .game-content { left: calc(var(--frame-gutter) + 20rem); right: calc(var(--frame-gutter) + .5rem); padding-right: .5rem; }
+    .game-footer { padding-inline: calc(var(--frame-gutter) + .5rem); }
   }
 </style>

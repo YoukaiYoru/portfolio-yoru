@@ -47,11 +47,11 @@ const materiaI18nKeys: Record<string, string> = {
       <span>LV <strong>0{project.number}</strong></span>
     </div>
 
-    <p data-i18n="projects.desc.moodiary">{project.description}</p>
+    <p data-i18n={`projects.desc.${project.slug}`}>{project.description}</p>
 
     <footer>
       <ul aria-label="Technologies">{project.stack.map(item => <li>{item}</li>)}</ul>
-      <strong data-i18n="projects.result.moodiary">{project.result}</strong>
+      <strong data-i18n={`projects.result.${project.slug}`}>{project.result}</strong>
     </footer>
   </div>
 
@@ -113,6 +113,17 @@ const materiaI18nKeys: Record<string, string> = {
     .loadout-row__materia { grid-column: 2; grid-row: 2; padding-top: 0; }
     .loadout-row__status { display: none; }
     footer { align-items: flex-start; flex-direction: column; }
+  }
+  @media (min-width: 1024px) and (max-width: 1399px) {
+    .loadout-row { grid-template-columns: 3.75rem minmax(0, 1fr) auto; gap: .75rem; padding: .95rem .75rem; }
+    .loadout-row__icon > span { width: 2.8rem; height: 2.8rem; }
+    .loadout-row__icon :global(.game-vector) { --icon-size: 1.65rem !important; }
+    h2 { font-size: clamp(1.3rem, 2.3vw, 1.9rem); }
+    p { font-size: .84rem; line-height: 1.4; }
+    footer { gap: .5rem; margin-top: .5rem; }
+    li { font-size: .63rem; }
+    footer > strong { font-size: .76rem; }
+    .loadout-row__materia { gap: .3rem; }
   }
   @media (max-width: 390px) {
     .loadout-row { grid-template-columns: 2.6rem minmax(0, 1fr); gap: .4rem; padding-inline: .25rem; }
